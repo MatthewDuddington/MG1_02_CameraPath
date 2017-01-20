@@ -40,30 +40,30 @@ public:
   }
 
   Vector3 operator+(const Vector3 rhs) {
-    x_ += rhs.x();
-    y_ += rhs.y();
-    z_ += rhs.z();
+    x_ += rhs.x;
+    y_ += rhs.y;
+    z_ += rhs.z;
     return *this;
   }
 
   Vector3 operator-(const Vector3 rhs) {
-    x_ -= rhs.x();
-    y_ -= rhs.y();
-    z_ -= rhs.z();
+    x_ -= rhs.x;
+    y_ -= rhs.y;
+    z_ -= rhs.z;
     return *this;
   }
 
   Vector3 operator*(const Vector3 rhs) {
-    x_ = x_ * rhs.x();
-    y_ = y_ * rhs.y();
-    z_ = z_ * rhs.z();
+    x_ = x_ * rhs.x;
+    y_ = y_ * rhs.y;
+    z_ = z_ * rhs.z;
     return *this;
   }
 
   Vector3 operator/(const Vector3 rhs) {
-    x_ = x_ / rhs.x();
-    y_ = y_ / rhs.y();
-    z_ = z_ / rhs.z();
+    x_ = x_ / rhs.x;
+    y_ = y_ / rhs.y;
+    z_ = z_ / rhs.z;
     return *this;
   }
 
