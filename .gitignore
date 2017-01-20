@@ -60,3 +60,4 @@ Camera_Path/Intermediate/*
 
 # Cache files for the editor to use
 Camera_Path/DerivedDataCache/*
+Camera_Path/Camera_Path.VC.db
