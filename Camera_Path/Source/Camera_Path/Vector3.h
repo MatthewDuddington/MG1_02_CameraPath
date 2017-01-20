@@ -70,5 +70,11 @@ public:
   static float DotProduct(const Vector3 lhs, const Vector3 rhs) {
     return ((lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z));
   }
+  
+  static Vector3 CrossProduct(const Vector3 lhs, const Vector3 rhs) {
+    return Vector3(  (lhs.y * rhs.z) - (lhs.z * rhs.y) ,
+                   -((lhs.x * rhs.z) - (lhs.z * rhs.x)),
+                     (lhs.x * rhs.y) - (lhs.y * rhs.x) );
+  }
 
 };
