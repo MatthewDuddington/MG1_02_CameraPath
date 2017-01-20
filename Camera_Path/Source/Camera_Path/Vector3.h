@@ -39,39 +39,39 @@ public:
     return z_;
   }
 
-  Vector3 operator+(const Vector3 rhs) {
+  Vector3 operator+(const Vector3& rhs) {
     x_ += rhs.x;
     y_ += rhs.y;
     z_ += rhs.z;
     return *this;
   }
 
-  Vector3 operator-(const Vector3 rhs) {
+  Vector3 operator-(const Vector3& rhs) {
     x_ -= rhs.x;
     y_ -= rhs.y;
     z_ -= rhs.z;
     return *this;
   }
 
-  Vector3 operator*(const Vector3 rhs) {
+  Vector3 operator*(const Vector3& rhs) {
     x_ = x_ * rhs.x;
     y_ = y_ * rhs.y;
     z_ = z_ * rhs.z;
     return *this;
   }
 
-  Vector3 operator/(const Vector3 rhs) {
+  Vector3 operator/(const Vector3& rhs) {
     x_ = x_ / rhs.x;
     y_ = y_ / rhs.y;
     z_ = z_ / rhs.z;
     return *this;
   }
 
-  static float DotProduct(const Vector3 lhs, const Vector3 rhs) {
+  static float DotProduct(const Vector3& lhs, const Vector3& rhs) {
     return ((lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z));
   }
   
-  static Vector3 CrossProduct(const Vector3 lhs, const Vector3 rhs) {
+  static Vector3 CrossProduct(const Vector3& lhs, const Vector3& rhs) {
     return Vector3(  (lhs.y * rhs.z) - (lhs.z * rhs.y) ,
                    -((lhs.x * rhs.z) - (lhs.z * rhs.x)),
                      (lhs.x * rhs.y) - (lhs.y * rhs.x) );
