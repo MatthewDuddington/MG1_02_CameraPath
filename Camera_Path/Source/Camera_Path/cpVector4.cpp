@@ -2,11 +2,6 @@
 
 #include "Camera_Path.h"
 #include "cpVector4.h"
-
-// Fill out your copyright notice in the Description page of Project Settings.
-
-#include "Camera_Path.h"
-#include "cpVector4.h"
 #include <math.h>
 
 float cpVector4::x_ = 0;
@@ -45,25 +40,25 @@ float& cpVector4::w() {
 }
 
 cpVector4 operator cpVector4:: + (const cpVector4& rhs) {
-  x_ += rhs.x;
-  y_ += rhs.y;
-  z_ += rhs.z;
-  w_ += rhs.w;
+  x_ += rhs.x();
+  y_ += rhs.y();
+  z_ += rhs.z();
+  w_ += rhs.w();
   return *this;
 }
 
 cpVector4 operator cpVector4:: - (const cpVector4& rhs) {
-  x_ -= rhs.x;
-  y_ -= rhs.y;
-  z_ -= rhs.z;
-  w_ -= rhs.w;
+  x_ -= rhs.x();
+  y_ -= rhs.y();
+  z_ -= rhs.z();
+  w_ -= rhs.w();
   return *this;
 }
 
 cpVector4 operator cpVector4::*(const cpVector4& rhs) {
-  x_ = x_ * rhs.x;
-  y_ = y_ * rhs.y;
-  z_ = z_ * rhs.z;
+  x_ = x_ * rhs.x();
+  y_ = y_ * rhs.y();
+  z_ = z_ * rhs.z();
   return *this;
 }
 
@@ -75,9 +70,9 @@ cpVector4 operator cpVector4::*(const float rhs) {
 }
 
 cpVector4 operator cpVector4:: / (const cpVector4& rhs) {
-  x_ = x_ / rhs.x;
-  y_ = y_ / rhs.y;
-  z_ = z_ / rhs.z;
+  x_ = x_ / rhs.x();
+  y_ = y_ / rhs.y();
+  z_ = z_ / rhs.z();
   return *this;
 }
 
@@ -96,11 +91,11 @@ cpVector4 cpVector4::Normalised() {
 }
 
 static float cpVector4::DotProduct(const cpVector4& lhs, const cpVector4& rhs) {
-  return ((lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z));
+  return ((lhs.x() * rhs.x()) + (lhs.y() * rhs.y()) + (lhs.z() * rhs.z()));
 }
 
 static cpVector4 cpVector4::CrossProduct(const cpVector4& lhs, const cpVector4& rhs) {
-  return cpVector4((lhs.y * rhs.z) - (lhs.z * rhs.y),
-    -((lhs.x * rhs.z) - (lhs.z * rhs.x)),
-    (lhs.x * rhs.y) - (lhs.y * rhs.x));
+  return cpVector4(  (lhs.y() * rhs.z()) - (lhs.z() * rhs.y()) ,
+                   -((lhs.x() * rhs.z()) - (lhs.z() * rhs.x())),
+                     (lhs.x() * rhs.y()) - (lhs.y() * rhs.x()));
 }
