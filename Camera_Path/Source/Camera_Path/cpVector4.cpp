@@ -4,10 +4,10 @@
 #include "cpVector4.h"
 #include <math.h>
 
-float cpVector4::x_ = 0;
-float cpVector4::y_ = 0;
-float cpVector4::z_ = 0;
-float cpVector4::w_ = 0;
+//float cpVector4::x_ = 0;
+//float cpVector4::y_ = 0;
+//float cpVector4::z_ = 0;
+//float cpVector4::w_ = 0;
 
 cpVector4::cpVector4() {
   x_ = 0;

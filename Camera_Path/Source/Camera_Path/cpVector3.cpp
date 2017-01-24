@@ -4,9 +4,9 @@
 #include "cpVector3.h"
 #include <math.h>
 
-float cpVector3::x_ = 0;
-float cpVector3::y_ = 0;
-float cpVector3::z_ = 0;
+//float cpVector3::x_ = 0;
+//float cpVector3::y_ = 0;
+//float cpVector3::z_ = 0;
 
 cpVector3::cpVector3(float x, float y, float z) {
   x_ = x;

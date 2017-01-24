@@ -9,10 +9,10 @@ class CAMERA_PATH_API cpVector4
 {
 private:
 
-  float x_;
-  float y_;
-  float z_;
-  float w_;
+  float x_ = 0;
+  float y_ = 0;
+  float z_ = 0;
+  float w_ = 0;
 
 public:
 
