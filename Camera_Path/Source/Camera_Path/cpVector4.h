@@ -39,3 +39,13 @@ public:
 
   static cpVector4 CrossProduct(const cpVector4& lhs, const cpVector4& rhs);
 
+  static cpVector4 Zero();
+  static cpVector4 One();
+  static cpVector4 Right();
+  static cpVector4 Left();
+  static cpVector4 Forward();
+  static cpVector4 Backward();
+  static cpVector4 Up();
+  static cpVector4 Down();
+
+};

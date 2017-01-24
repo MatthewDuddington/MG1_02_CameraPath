@@ -91,4 +91,34 @@ static cpVector3 cpVector3::CrossProduct(const cpVector3& lhs, const cpVector3& 
                      (lhs.x() * rhs.y()) - (lhs.y() * rhs.x()));
 }
 
+static cpVector3 cpVector3::Zero() {
+  return cpVector3(0, 0, 0);
+}
 
+static cpVector3 cpVector3::One() {
+  return cpVector3(1, 1, 1);
+}
+
+static cpVector3 cpVector3::Right() {
+  return cpVector3(1, 0, 0);
+}
+
+static cpVector3 cpVector3::Left() {
+  return cpVector3(-1, 0, 0);
+}
+
+static cpVector3 cpVector3::Forward() {
+  return cpVector3(0, 1, 0);
+}
+
+static cpVector3 cpVector3::Backward() {
+  return cpVector3(0, -1, 0);
+}
+
+static cpVector3 cpVector3::Up() {
+  return cpVector3(0, 0, 1);
+}
+
+static cpVector3 cpVector3::Down() {
+  return cpVector3(0, 0, -1);
+}

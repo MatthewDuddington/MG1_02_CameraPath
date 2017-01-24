@@ -9,6 +9,13 @@ float cpVector4::y_ = 0;
 float cpVector4::z_ = 0;
 float cpVector4::w_ = 0;
 
+cpVector4::cpVector4() {
+  x_ = 0;
+  y_ = 0;
+  z_ = 0;
+  w_ = 0;
+}
+
 cpVector4::cpVector4(float x, float y, float z, float w) {
   x_ = x;
   y_ = y;
@@ -98,4 +105,36 @@ static cpVector4 cpVector4::CrossProduct(const cpVector4& lhs, const cpVector4& 
   return cpVector4(  (lhs.y() * rhs.z()) - (lhs.z() * rhs.y()) ,
                    -((lhs.x() * rhs.z()) - (lhs.z() * rhs.x())),
                      (lhs.x() * rhs.y()) - (lhs.y() * rhs.x()));
+}
+
+static cpVector4 cpVector4::Zero() {
+  return cpVector4(0, 0, 0, 0);
+}
+
+static cpVector4 cpVector4::One() {
+  return cpVector4(1, 1, 1, 1);
+}
+
+static cpVector4 cpVector4::Right() {
+  return cpVector4(1, 0, 0, 0);
+}
+
+static cpVector4 cpVector4::Left() {
+  return cpVector4(-1, 0, 0, 0);
+}
+
+static cpVector4 cpVector4::Forward() {
+  return cpVector4(0, 1, 0, 0);
+}
+
+static cpVector4 cpVector4::Backward() {
+  return cpVector4(0, -1, 0, 0);
+}
+
+static cpVector4 cpVector4::Up() {
+  return cpVector4(0, 0, 1, 0);
+}
+
+static cpVector4 cpVector4::Down() {
+  return cpVector4(0, 0, -1, 0);
 }
