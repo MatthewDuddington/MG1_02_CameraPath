@@ -7,7 +7,35 @@
  */
 class CAMERA_PATH_API cpVector4
 {
+private:
+
+  float x_;
+  float y_;
+  float z_;
+  float w_;
+
 public:
-	cpVector4();
-	~cpVector4();
-};
+
+  cpVector4(float x, float y, float z, float w);
+
+  ~cpVector4();
+
+  float& x();
+  float& y();
+  float& z();
+  float& w();
+
+  cpVector4 operator+(const cpVector4& rhs);
+  cpVector4 operator-(const cpVector4& rhs);
+  cpVector4 operator*(const cpVector4& rhs);
+  cpVector4 operator*(const int rhs);
+  cpVector4 operator/(const cpVector4& rhs);
+
+  float Magnitude();
+
+  cpVector4 Normalised();
+
+  static float DotProduct(const cpVector4& lhs, const cpVector4& rhs);
+
+  static cpVector4 CrossProduct(const cpVector4& lhs, const cpVector4& rhs);
+
