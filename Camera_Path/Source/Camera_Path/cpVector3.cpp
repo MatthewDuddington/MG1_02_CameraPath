@@ -33,23 +33,23 @@ float& cpVector3::z() {
 }
 
 cpVector3 operator cpVector3::+(const cpVector3& rhs) {
-  x_ += rhs.x;
-  y_ += rhs.y;
-  z_ += rhs.z;
+  x_ += rhs.x();
+  y_ += rhs.y();
+  z_ += rhs.z();
   return *this;
 }
 
 cpVector3 operator cpVector3::-(const cpVector3& rhs) {
-  x_ -= rhs.x;
-  y_ -= rhs.y;
-  z_ -= rhs.z;
+  x_ -= rhs.x();
+  y_ -= rhs.y();
+  z_ -= rhs.z();
   return *this;
 }
 
 cpVector3 operator cpVector3::*(const cpVector3& rhs) {
-  x_ = x_ * rhs.x;
-  y_ = y_ * rhs.y;
-  z_ = z_ * rhs.z;
+  x_ = x_ * rhs.x();
+  y_ = y_ * rhs.y();
+  z_ = z_ * rhs.z();
   return *this;
 }
 
@@ -61,9 +61,9 @@ cpVector3 operator cpVector3::*(const float rhs) {
 }
 
 cpVector3 operator cpVector3::/(const cpVector3& rhs) {
-  x_ = x_ / rhs.x;
-  y_ = y_ / rhs.y;
-  z_ = z_ / rhs.z;
+  x_ = x_ / rhs.x();
+  y_ = y_ / rhs.y();
+  z_ = z_ / rhs.z();
   return *this;
 }
 
@@ -82,13 +82,13 @@ cpVector3 cpVector3::Normalised() {
 }
 
 static float cpVector3::DotProduct(const cpVector3& lhs, const cpVector3& rhs) {
-  return ((lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z));
+  return ((lhs.x() * rhs.x()) + (lhs.y() * rhs.y()) + (lhs.z() * rhs.z()));
 }
 
 static cpVector3 cpVector3::CrossProduct(const cpVector3& lhs, const cpVector3& rhs) {
-  return cpVector3(  (lhs.y * rhs.z) - (lhs.z * rhs.y) ,
-                 -((lhs.x * rhs.z) - (lhs.z * rhs.x)),
-                   (lhs.x * rhs.y) - (lhs.y * rhs.x));
+  return cpVector3(  (lhs.y() * rhs.z()) - (lhs.z() * rhs.y()) ,
+                   -((lhs.x() * rhs.z()) - (lhs.z() * rhs.x())),
+                     (lhs.x() * rhs.y()) - (lhs.y() * rhs.x()));
 }
 
 
