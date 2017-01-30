@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MovementPatterns : MonoBehaviour {
 
-     public enum Types {Bezier, BSpline3, Hermit}
+     public enum Types {Bezier, BSpline3, Hermit, CatmullRom}
      public Types curveType;
      private Vector3[] way_points;
 
@@ -39,6 +39,13 @@ public class MovementPatterns : MonoBehaviour {
                     if (way_points.Length >= 2)
                     {
                          c = new HermitCurve(way_points[0], way_points[1], new Vector3(0, 0, 0), new Vector3(-10, 0, 0));
+                         c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
+                    }
+                    break;
+               case Types.CatmullRom:
+                    if (way_points.Length >= 4)
+                    {
+                         c = new CatmullRomCurve(way_points[0], way_points[1], way_points[2], way_points[3]);
                          c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
                     }
                     break;
@@ -175,5 +182,35 @@ public class HermitCurve:Curve
                result += coeff[i] * points[i];
 
           return result;
+     }
+}
+
+// this curve is always starts in p1 and ends in p2
+// p0 and p3 are responsible for the tangent and direction
+public class CatmullRomCurve:Curve
+{
+     public CatmullRomCurve(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+     {
+          points = new List<Vector3>();
+          points.Add(p0);
+          points.Add(p1);
+          points.Add(p2);
+          points.Add(p3);
+     }
+
+     public override Vector3 Evaluate(float t)
+     {
+          float[] coeff = new float[4];
+          coeff[0] = -t*(1 - t) * (1 - t);
+          coeff[1] = (2 - 5 * t * t + 3 * t * t * t);
+          coeff[2] = t * (1 + 4 * t - 3 * t * t);
+          coeff[3] = -t * t * (1 - t);
+
+          Vector3 result = Vector3.zero;
+
+          for (int i = 0; i != points.Count; i++)
+               result += coeff[i] * points[i];
+
+          return 0.5f*result;
      }
 }
