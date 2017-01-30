@@ -10,23 +10,17 @@ public class CameraLook : MonoBehaviour {
 
     public int timer = 0;
 
+    private Curve cushioningCurve;
+
 	// Use this for initialization
 	void Start () {
 		
+		cushioningCurve = new HermitCurve(Vector3.zero, new Vector3(1,1,0), new Vector3(2f,0,0), new Vector3(-3f,0,0));
+		//cushioningCurve.DrawDebugCurve(0.1f, 100);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-//       if(timer == 299){
-//        pOfI_ID++;
-//       }
-//
-//       transform.LookAt(pOfI[pOfI_ID].transform);
-//       timer++;
-//       timer = timer % 300;
-
-
 
 		// Check for camera being close enough to recieve rotation influence from each point of interest
 		float[] weights = new float[pois.Length];
@@ -34,7 +28,11 @@ public class CameraLook : MonoBehaviour {
 			float distanceFromPoI = Vector3.Magnitude(pois[i].transform.position - transform.position);
 			print (distanceFromPoI);
 			if (distanceFromPoI <= pois[i].AreaOfInterestRadius()) {
-				weights[i] = 1 - (distanceFromPoI / pois[i].AreaOfInterestRadius());
+				float weight = distanceFromPoI / pois[i].AreaOfInterestRadius();
+				// Use Hermet cuve Y value to 'cushion' the approach and exit from PoIs
+				weight = cushioningCurve.Evaluate(weight).y;
+				weight = 1 - weight;
+				weights[i] = weight;
 			}
 			else {
 				weights[i] = 0;
@@ -61,9 +59,6 @@ public class CameraLook : MonoBehaviour {
 		// Look at the compound point
 		PoIBlob.transform.position = compoundPoI;
 		transform.LookAt(compoundPoI);
-
     }
-
-
 
 }
