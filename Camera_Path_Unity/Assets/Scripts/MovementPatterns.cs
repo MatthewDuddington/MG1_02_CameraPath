@@ -7,7 +7,7 @@ public class MovementPatterns : MonoBehaviour {
 
      public enum Types {Bezier, BSpline3, Hermit, CatmullRom}
      public Types curveType;
-     private Vector3[] way_points;
+     public Vector3[] way_points;
 
      public float debugVisibilityDuration;
      public float debugDrawingStep;
