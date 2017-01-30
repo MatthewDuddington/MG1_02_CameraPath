@@ -7,7 +7,7 @@ public class PointOfInterest : MonoBehaviour {
 	private float areaOfInterestRadius;
 
 	void Start() {
-		areaOfInterestRadius = GetComponent<SphereCollider>().radius;
+		areaOfInterestRadius = 0.5f * transform.lossyScale.x;
 	}
 
 	public float AreaOfInterestRadius() {

@@ -7,9 +7,7 @@ public class CameraLook : MonoBehaviour {
     public PointOfInterest[] pois;
     public int poi_ID = 0;
     public GameObject PoIBlob;
-
-    public int timer = 0;
-
+    
     private Curve cushioningCurve;
 
 	// Use this for initialization
