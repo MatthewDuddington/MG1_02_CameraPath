@@ -100,6 +100,16 @@ public class BezierCurve: Curve
           degree = points.Count +1;
      }
 
+    public BezierCurve(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        points = new List<Vector3>();
+        points.Add(p0);
+        points.Add(p1);
+        points.Add(p2);
+        points.Add(p3);
+        degree = points.Count +1;
+    }
+
      //get value in point t    
      override public Vector3 Evaluate(float t)
      {
