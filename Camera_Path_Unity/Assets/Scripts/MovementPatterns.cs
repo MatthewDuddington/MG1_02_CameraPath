@@ -100,18 +100,42 @@ public class BezierCurve: Curve
           degree = points.Count +1;
      }
 
-     //get value in point t    
-     override public Vector3 Evaluate(float t)
-     {
-          Vector3 result = Vector3.zero;
-          for (int i = 0; i !=degree - 1; i++)
-          {
-               float bernstPoly = fact(degree) / fact(i) / fact(degree - i) *
-                    Mathf.Pow(t, i) * Mathf.Pow(1 - t, degree - i);
-               result += bernstPoly * points[i];
-          }
-          return result;
-     }
+    public BezierCurve(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        points = new List<Vector3>();
+        points.Add(p0);
+        points.Add(p1);
+        points.Add(p2);
+        points.Add(p3);
+        degree = points.Count +1;
+    }
+
+    override public Vector3 Evaluate(float t)
+    {
+        
+        Vector3 a = -points[0]+(3*points[1])-(3*points[2])+points[3];
+        Vector3 b = (3*points[0]) - (6*points[1])+(3*points[2]);
+        Vector3 c = -(3 * points[0]) + (3 * points[1]);
+        Vector3 d = points[0];
+
+
+        Vector3 result = (a * (t * t * t)) + (b * (t * t)) + (c * (t)) + d;
+
+        return result;
+    }
+
+    //get value in point t    
+    //override public Vector3 Evaluate(float t)
+    //{
+    //     Vector3 result = Vector3.zero;
+    //     for (int i = 0; i !=degree - 1; i++)
+    //     {
+    //          float bernstPoly = fact(degree) / fact(i) / fact(degree - i) *
+    //               Mathf.Pow(t, i) * Mathf.Pow(1 - t, degree - i);
+    //          result += bernstPoly * points[i];
+    //     }
+    //     return result;
+    //}
 }
 
 // B spline - 3rd degree
