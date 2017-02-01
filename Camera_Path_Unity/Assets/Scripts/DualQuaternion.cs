@@ -18,14 +18,15 @@ public class DualQuaternion : MonoBehaviour {
 	public Quaternion Dual { get { return dual; } set { real = value; } }
 
 	DualQuaternion () {
-		Real = Quaternion(0,0,0,1);
-		Dual = Quaternion(0,0,0,0);
+		Real = new Quaternion(0,0,0,1);
+		Dual = new Quaternion(0,0,0,0);
 	}
 
 	DualQuaternion (Quaternion real, Quaternion dual) {
 		// Real = real;
 		//Real = real / (real * Quaternion.Inverse(real)); // Normalised needed?
-		Real = real / Mathf.Sqrt(Quaternion.Dot(real, real));
+		float magnitudeOfReal = Mathf.Sqrt(Quaternion.Dot(real, real));
+		Real = MultiplyQuaternionByScaler(real, (1 / magnitudeOfReal)); // Normalised?
 		Dual = dual;
 	}
 
@@ -37,22 +38,23 @@ public class DualQuaternion : MonoBehaviour {
 
 	// Addition
 	static public DualQuaternion operator +(DualQuaternion lhs, DualQuaternion rhs) {
-		Quaternion realAdded = lhs.Real + rhs.Real;
-		Quaternion dualAdded = lhs.Dual + lhs.Dual;
+		Quaternion realAdded = AddQuaternions(lhs.Real, rhs.Real);
+		Quaternion dualAdded = AddQuaternions(lhs.Dual, lhs.Dual);
 		return new DualQuaternion(realAdded, dualAdded);
 	}
 
 	// Multiplication
 	static public DualQuaternion operator *(DualQuaternion lhs, DualQuaternion rhs) {
-		Quaternion realMultiplied = lhs.Real * rhs.Real;
-		Quaternion dualMultiplied = (lhs.Real * rhs.Dual) + (lhs.Dual * rhs.Real);
+		Quaternion realMultiplied = MultiplyQuaternions(lhs.Real, rhs.Real);
+		Quaternion dualMultiplied = AddQuaternions( MultiplyQuaternions(lhs.Real, rhs.Dual) ,
+													MultiplyQuaternions(lhs.Dual, rhs.Real) );
 		return new DualQuaternion(realMultiplied, dualMultiplied);
 	}
 
 	// Scalar Multiplication
 	static public DualQuaternion operator *(DualQuaternion dualQuat, float scalar) {
-		Quaternion realScaled = dualQuat.Real * scalar;
-		Quaternion dualScaled = dualQuat.Dual * scalar;
+		Quaternion realScaled = MultiplyQuaternionByScaler(dualQuat.Real, scalar);
+		Quaternion dualScaled = MultiplyQuaternionByScaler(dualQuat.Dual, scalar);
 		return new DualQuaternion(realScaled, dualScaled);
 	}
 
@@ -63,15 +65,53 @@ public class DualQuaternion : MonoBehaviour {
 		return new DualQuaternion(realConjugate, dualConjugate);
 	}
 
+	/* TODO
 	// Magnitude
 	static public float Magnitude(DualQuaternion dualQuat) {
-		return dualQuat * DualQuaternion.Conjugate(dualQuat);
+		float newW = dualQuat.
+
+
 	}
+	*/
 
 	// Normalise
 	static public DualQuaternion Normalise(DualQuaternion dualQuat) {
 		float magnitude = Mathf.Sqrt(Quaternion.Dot(dualQuat.Real, dualQuat.Real));
-		return new DualQuaternion(dualQuat.Real * (1 / magnitude), dualQuat.Dual * (1 / magnitude));
+		DualQuaternion normalised = new DualQuaternion( MultiplyQuaternionByScaler(dualQuat.Real, (1 / magnitude)) ,
+													    MultiplyQuaternionByScaler(dualQuat.Dual, (1 / magnitude)) );
+		return normalised;
 	}
 
+	// Quaternion arithmetic operations (as Unity doesn't have them?!)
+	static public Quaternion AddQuaternions(Quaternion lhs, Quaternion rhs) {
+		float newW = lhs.w + rhs.w;
+		float newX = lhs.x + rhs.x;
+		float newY = lhs.y + rhs.y;
+		float newZ = lhs.z + rhs.z;
+		return new Quaternion(newW, newX, newY, newZ);
+	}
+
+	// https://uk.mathworks.com/help/aeroblks/quaternionmultiplication.html
+	static public Quaternion MultiplyQuaternions(Quaternion lhs, Quaternion rhs) {
+		float newW = (lhs.w * rhs.w) - (lhs.x * rhs.x) - (lhs.y * rhs.y) - (lhs.z * rhs.z);
+		float newX = (lhs.w * rhs.x) - (lhs.x * rhs.w) - (lhs.y * rhs.z) - (lhs.z * rhs.y);
+		float newY = (lhs.w * rhs.y) - (lhs.x * rhs.z) - (lhs.y * rhs.w) - (lhs.z * rhs.x);
+		float newZ = (lhs.w * rhs.z) - (lhs.x * rhs.y) - (lhs.y * rhs.x) - (lhs.z * rhs.w);
+		return new Quaternion(newW, newX, newY, newZ);
+	}
+
+	static public Quaternion MultiplyQuaternionByScaler(Quaternion quat, float scaler) {
+		float newW = quat.w * scaler;
+		float newX = quat.x * scaler;
+		float newY = quat.y * scaler;
+		float newZ = quat.z * scaler;
+		return new Quaternion(newW, newX, newY, newZ);
+	}
+
+	/* TODO
+	static public Quaternion NormalisedQuaternion(Quaternion quat) {
+		
+	}
+	*/
+	 
 }
