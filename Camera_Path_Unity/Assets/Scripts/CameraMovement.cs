@@ -11,36 +11,33 @@ public class CameraMovement : MonoBehaviour {
     public GameObject[] way_points;
     public int wp_id; 
 
-
-    [Header("Overview")]
-    public float speed = 1.0F;
     public enum curveType { lerp, bezier, bspline, hermit, catmullrom }
     public curveType curveState;
 
     private float startTime;
     private float distCovered;
 
-
+    [Header("Debug line")]
+    public float drawingStep = 0.1f;
+    public float visibilityDyration = 0.5f;
 
     [Header("Lerp")]
-
+    public float l_speed_multipler = 10;
 
     [Header("Bezier")]
-
+    public float b_speed_multipler = 0.5f;
 
     [Header("B-Spline")]
-
+    public float bS_speed_multipler = 0.5f;
 
     [Header("Hermit")]
-    public float h_angular_scale = 10; 
+    public float h_speed_multipler = 0.5f;
+    public float h_angular_scale = 10;
 
     [Header("Catmull-Rom")]
-
+    public float c_speed_multipler = 0.5f;
 
     Curve c;
-
-
-
 
 
     void Start(){
@@ -57,7 +54,6 @@ public class CameraMovement : MonoBehaviour {
     void Update()
     {
 
-        distCovered = (Time.time - startTime) * speed;
         switch (curveState){
             case curveType.lerp:
                 //do lerp
@@ -69,7 +65,7 @@ public class CameraMovement : MonoBehaviour {
                 break;
             case curveType.bspline:
                 // do bspline
-
+                createBSpline();
                 break;
             case curveType.hermit:
                 // do hermit
@@ -90,6 +86,7 @@ public class CameraMovement : MonoBehaviour {
 
     void createLerp()
     {
+        distCovered = (Time.time - startTime) * l_speed_multipler;
         float fracJourney = distCovered / Vector3.Distance(way_points[wp_id].transform.position, way_points[wp_id + 1].transform.position);
         transform.position = Vector3.Lerp(way_points[wp_id].transform.position, way_points[wp_id + 1].transform.position, fracJourney);
 
@@ -110,19 +107,20 @@ public class CameraMovement : MonoBehaviour {
 
     void createBezier()
     {
+        distCovered = (Time.time - startTime) * b_speed_multipler;
         c = new BezierCurve(way_points[wp_id].transform.position,
                             way_points[wp_id].transform.GetChild(1).transform.position,
                             way_points[wp_id+1].transform.GetChild(0).transform.position,
                             way_points[wp_id+1].transform.position);
-        c.DrawDebugCurve(0.1f, 100);
+        c.DrawDebugCurve(drawingStep, visibilityDyration);
 
-        print("P0: " + way_points[wp_id].transform.position +
-              "P1: " + way_points[wp_id].transform.GetChild(1).transform.position +
-              "P2: " + way_points[wp_id + 1].transform.GetChild(0).transform.position +
-              "P3: " + way_points[wp_id + 1].transform.position);
+        //print("P0: " + way_points[wp_id].transform.position +
+        //      "P1: " + way_points[wp_id].transform.GetChild(1).transform.position +
+        //      "P2: " + way_points[wp_id + 1].transform.GetChild(0).transform.position +
+        //      "P3: " + way_points[wp_id + 1].transform.position);
 
         transform.position = c.Evaluate(distCovered);
-
+        print("Result" + c.Evaluate(distCovered));
 
 
         if (distCovered >= 1)
@@ -132,6 +130,7 @@ public class CameraMovement : MonoBehaviour {
             startTime = Time.time;
             if (wp_id == way_points.Length - 1)
             {
+                
                 wp_id = 0;
             }
         }
@@ -139,11 +138,19 @@ public class CameraMovement : MonoBehaviour {
 
     void createBSpline()
     {
-        c = new B3SplineCurve(way_points[wp_id].transform.position,
-                           way_points[wp_id].transform.GetChild(1).transform.position,
-                           way_points[wp_id + 1].transform.GetChild(0).transform.position,
-                           way_points[wp_id + 1].transform.position);
-        c.DrawDebugCurve(0.1f, 100);
+        distCovered = (Time.time - startTime) * bS_speed_multipler;
+        //c = new B3SplineCurve(way_points[wp_id].transform.position,
+        //                   way_points[wp_id].transform.GetChild(1).transform.position,
+        //                   way_points[wp_id + 1].transform.GetChild(0).transform.position,
+        //                   way_points[wp_id + 1].transform.position);
+
+        c = new B3SplineCurve(way_points[0].transform.position,
+                                way_points[1].transform.position,
+                                way_points[2].transform.position,
+                                way_points[3].transform.position                        
+                          
+                           );
+        c.DrawDebugCurve(drawingStep, visibilityDyration);
 
         print("P0: " + way_points[wp_id].transform.position +
               "P1: " + way_points[wp_id].transform.GetChild(1).transform.position +
@@ -168,8 +175,9 @@ public class CameraMovement : MonoBehaviour {
 
     void createHermit()
     {
+        distCovered = (Time.time - startTime) * h_speed_multipler;
         c = new HermitCurve(way_points[wp_id].transform.position, way_points[wp_id + 1].transform.position, -way_points[wp_id].transform.forward * h_angular_scale, way_points[wp_id + 1].transform.forward * h_angular_scale);
-        c.DrawDebugCurve(0.1f, 100);
+        c.DrawDebugCurve(drawingStep, visibilityDyration);
         transform.position = c.Evaluate(distCovered);
 
 
@@ -187,11 +195,12 @@ public class CameraMovement : MonoBehaviour {
 
     void createCatmullrom()
     {
+        distCovered = (Time.time - startTime) * c_speed_multipler;
         c = new CatmullRomCurve(way_points[wp_id].transform.GetChild(1).transform.position,
                                 way_points[wp_id].transform.position,
                                 way_points[wp_id + 1].transform.position,
                                 way_points[wp_id + 1].transform.GetChild(0).transform.position);
-        c.DrawDebugCurve(0.1f, 100);
+        c.DrawDebugCurve(drawingStep, visibilityDyration);
         transform.position = c.Evaluate(distCovered);
 
 
