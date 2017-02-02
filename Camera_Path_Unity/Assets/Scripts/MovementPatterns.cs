@@ -14,7 +14,7 @@ public class MovementPatterns : MonoBehaviour {
 
      // Use this for initialization
      void Start () {
-          GameObject[] way_objects = GetComponent<CameraMovement>().way_points;
+          GameObject[] way_objects = GetComponent<CameraMovement>().waypoints;
           way_points = new Vector3[way_objects.Length];
           for (int i = 0; i != way_objects.Length; i++)
                way_points[i] = way_objects[i].transform.position;
