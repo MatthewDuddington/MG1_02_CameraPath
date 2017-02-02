@@ -3,40 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementType : MonoBehaviour {
-
-    public MovementTypes movement;
-
-    public GameObject wp_holder;
-    private GameObject[] waypoints;
-
-	// Use this for initialization
-	void Start () {
-
-        waypoints = new GameObject[wp_holder.transform.childCount];
-        for (int i = 0; i != waypoints.Length; i++)
-            waypoints[i] = wp_holder.transform.GetChild(i).gameObject;
-
-        movement.setWp(waypoints);       
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        transform.position = movement.moveCamera();
-	}
-}
-
-public abstract class MovementTypes : ScriptableObject
+public abstract class MovementType : ScriptableObject
 {
     public GameObject[] waypoints;
     public float startTime;
     public float distCovered;
     public int wp_id;
-    public float speed; 
+    public float speed;
 
-    public MovementTypes() { }
+    public Curve curveType; 
 
-    public abstract void setWp(GameObject[] wp);
+    public MovementType() { }
+
+    public void reset()
+    {
+        startTime = 0;
+        //speed = 0;
+        wp_id = 0;
+        distCovered = 0;
+    }
+
+    //public abstract void setWp(GameObject[] wp);
+    public void setWp(GameObject[] wp)
+    {
+        waypoints = new GameObject[wp.Length];
+        waypoints = wp;
+    }
+
 
     public abstract Vector3 moveCamera();
 
@@ -44,16 +37,10 @@ public abstract class MovementTypes : ScriptableObject
 }
 
 [CreateAssetMenu(fileName = "LerpMovement", menuName = "MovementTypes/LerpMovement", order = 1)]
-public class LerpMovement : MovementTypes
+public class LerpMovement : MovementType
 {
 
     public LerpMovement() { }
-
-    public override void setWp(GameObject[] wp)
-    {
-        waypoints = new GameObject[wp.Length];
-        waypoints = wp;
-    }
 
     override public Vector3 moveCamera()
     {
@@ -79,78 +66,164 @@ public class LerpMovement : MovementTypes
 
 
 [CreateAssetMenu(fileName = "BezierMovement", menuName = "MovementTypes/BezierMovement", order = 2)]
-public class BezierMovement : MovementTypes
+public class BezierMovement : MovementType
 {
 
     public BezierMovement() { }
 
-    public override void setWp(GameObject[] wp)
-    {
-        waypoints = new GameObject[wp.Length];
-        waypoints = wp;
-    }
-
     override public Vector3 moveCamera()
     {
-        Vector3 results = Vector3.zero;
+        distCovered = (Time.time - startTime) * speed;
+        curveType = new BezierCurve(waypoints[wp_id].transform.position,
+                            waypoints[wp_id].transform.GetChild(1).transform.position,
+                            waypoints[wp_id + 1].transform.GetChild(0).transform.position,
+                            waypoints[wp_id + 1].transform.position);
+        curveType.DrawDebugCurve(0.1f, 1);
+
+        //print("P0: " + way_points[wp_id].transform.position +
+        //      "P1: " + way_points[wp_id].transform.GetChild(1).transform.position +
+        //      "P2: " + way_points[wp_id + 1].transform.GetChild(0).transform.position +
+        //      "P3: " + way_points[wp_id + 1].transform.position);
+
+        Vector3 results = curveType.Evaluate(distCovered);
+        MonoBehaviour.print("Result" + curveType.Evaluate(distCovered));
+
+
+        if (distCovered >= 1)
+        {
+            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
+            wp_id++;
+            startTime = Time.time;
+            if (wp_id == waypoints.Length - 1)
+            {
+
+                wp_id = 0;
+            }
+        }
         return results;
     }
 }
 
 [CreateAssetMenu(fileName = "BSplineMovement", menuName = "MovementTypes/BSplineMovement", order = 3)]
-public class BSplineMovement : MovementTypes
+public class BSplineMovement : MovementType
 {
 
     public BSplineMovement() { }
 
-    public override void setWp(GameObject[] wp)
-    {
-        waypoints = new GameObject[wp.Length];
-        waypoints = wp;
-    }
-
     override public Vector3 moveCamera()
     {
-        Vector3 results = Vector3.zero;
+        distCovered = (Time.time - startTime) * speed;
+        //c = new B3SplineCurve(way_points[wp_id].transform.position,
+        //                   way_points[wp_id].transform.GetChild(1).transform.position,
+        //                   way_points[wp_id + 1].transform.GetChild(0).transform.position,
+        //                   way_points[wp_id + 1].transform.position);
+
+        curveType = new B3SplineCurve(waypoints[0].transform.position,
+                                waypoints[1].transform.position,
+                                waypoints[2].transform.position,
+                                waypoints[3].transform.position
+
+                           );
+        curveType.DrawDebugCurve(0.1f, 1);
+
+        MonoBehaviour.print("P0: " + waypoints[wp_id].transform.position +
+              "P1: " + waypoints[wp_id].transform.GetChild(1).transform.position +
+              "P2: " + waypoints[wp_id + 1].transform.GetChild(0).transform.position +
+              "P3: " + waypoints[wp_id + 1].transform.position);
+
+        Vector3 results = curveType.Evaluate(distCovered);
+
+
+
+        if (distCovered >= 1)
+        {
+            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
+            wp_id++;
+            startTime = Time.time;
+            if (wp_id == waypoints.Length - 1)
+            {
+                wp_id = 0;
+            }
+        }
         return results;
     }
 }
 
 
 [CreateAssetMenu(fileName = "HermitMovement", menuName = "MovementTypes/HermitMovement", order = 4)]
-public class HermitMovement : MovementTypes
+public class HermitMovement : MovementType
 {
+
+    public float angular_scalar = 30.0f; 
 
     public HermitMovement() { }
 
-    public override void setWp(GameObject[] wp)
-    {
-        waypoints = new GameObject[wp.Length];
-        waypoints = wp;
-    }
-
     override public Vector3 moveCamera()
     {
-        Vector3 results = Vector3.zero;
+
+        distCovered = (Time.time - startTime) * speed;
+        curveType = new HermitCurve(waypoints[wp_id].transform.position,
+                                    waypoints[wp_id + 1].transform.position,
+                                    -waypoints[wp_id].transform.forward*angular_scalar,
+                                    waypoints[wp_id + 1].transform.forward*angular_scalar);
+        Vector3 results = curveType.Evaluate(distCovered);
+
+        curveType.DrawDebugCurve(0.1f,1);
+
+
+        if (distCovered >= 1)
+        {
+            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
+            wp_id++;
+            startTime = Time.time;
+            if (wp_id == waypoints.Length - 1)
+            {
+                wp_id = 0;
+            }
+        }
         return results;
+    
     }
 }
 
 [CreateAssetMenu(fileName = "CatmullMovement", menuName = "MovementTypes/CatmullMovement", order = 5)]
-public class CatmullMovement : MovementTypes
+public class CatmullMovement : MovementType
 {
 
     public CatmullMovement() { }
 
-    public override void setWp(GameObject[] wp)
-    {
-        waypoints = new GameObject[wp.Length];
-        waypoints = wp;
-    }
-
     override public Vector3 moveCamera()
     {
-        Vector3 results = Vector3.zero;
+        List<Vector3> tpositions = new List<Vector3>();
+
+        tpositions.Add(waypoints[0].transform.position + (waypoints[0].transform.forward * 10));
+        for(int i =0; i < waypoints.Length; i++)
+        {
+            tpositions.Add(waypoints[i].transform.position);
+        }
+        tpositions.Add(waypoints[waypoints.Length-1].transform.position + (waypoints[waypoints.Length-1].transform.forward * 10));
+
+
+        distCovered = (Time.time - startTime) * speed;
+        curveType = new CatmullRomCurve(tpositions[wp_id],
+                                tpositions[wp_id+1],
+                                tpositions[wp_id+2],
+                                tpositions[wp_id+3]);
+        curveType.DrawDebugCurve(0.1f, 1);
+        Vector3 results = curveType.Evaluate(distCovered);
+
+
+        if (distCovered >= 1)
+        {
+            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
+            wp_id++;
+            startTime = Time.time;
+            if (wp_id == tpositions.Count - 3)
+            {
+                wp_id = 0;
+            }
+        }
+
         return results;
     }
 }
