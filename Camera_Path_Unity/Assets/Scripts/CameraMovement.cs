@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class CameraMovement : MonoBehaviour {
 
     [Header("Waypoints")]
@@ -37,7 +36,7 @@ public class CameraMovement : MonoBehaviour {
     [Header("Catmull-Rom")]
     public float c_speed_multipler = 0.5f;
 
-    Curve c;
+    public Curve c;
 
 
     void Start(){
@@ -196,10 +195,10 @@ public class CameraMovement : MonoBehaviour {
     void createCatmullrom()
     {
         distCovered = (Time.time - startTime) * c_speed_multipler;
-        c = new CatmullRomCurve(way_points[wp_id].transform.GetChild(1).transform.position,
-                                way_points[wp_id].transform.position,
-                                way_points[wp_id + 1].transform.position,
-                                way_points[wp_id + 1].transform.GetChild(0).transform.position);
+        c = new CatmullRomCurve(way_points[0].transform.position,
+                                way_points[1].transform.position,
+                                way_points[2].transform.position,
+                                way_points[3].transform.position);
         c.DrawDebugCurve(drawingStep, visibilityDyration);
         transform.position = c.Evaluate(distCovered);
 
@@ -216,3 +215,4 @@ public class CameraMovement : MonoBehaviour {
         }
     }
 }
+
