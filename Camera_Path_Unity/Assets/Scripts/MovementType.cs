@@ -5,25 +5,29 @@ using UnityEngine;
 
 public abstract class MovementType : ScriptableObject
 {
-    public GameObject[] waypoints;
-    public float startTime;
-    public float distCovered;
-    public int wp_id;
-    public float speed;
+    protected GameObject[] waypoints;
+    protected float startTime;
+    protected float distCovered;
+    protected int wp_id;
+    protected Curve curveType;
 
-    public Curve curveType; 
+
+    [Header("Path Control")]
+    public float speed = 0.5f;
+
+    [Header("Debug Line")]
+    public float debug_drawing_step = 0.01f;
+    public float debug_duration = 1; 
 
     public MovementType() { }
 
     public void reset()
     {
         startTime = 0;
-        //speed = 0;
         wp_id = 0;
         distCovered = 0;
     }
 
-    //public abstract void setWp(GameObject[] wp);
     public void setWp(GameObject[] wp)
     {
         waypoints = new GameObject[wp.Length];
@@ -32,6 +36,18 @@ public abstract class MovementType : ScriptableObject
 
 
     public abstract Vector3 moveCamera();
+
+    protected void finishedSection()
+    {
+        MonoBehaviour.print("Updating Wp_id:.." + wp_id);
+        wp_id++;
+        startTime = Time.time;
+        if (wp_id == waypoints.Length - 1)
+        {
+
+            wp_id = 0;
+        }
+    }
 
 
 }
@@ -52,13 +68,7 @@ public class LerpMovement : MovementType
 
         if (fracJourney >= 1)
         {
-            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
-            wp_id++;
-            startTime = Time.time;
-            if (wp_id == waypoints.Length - 1)
-            {
-                wp_id = 0;
-            }
+            finishedSection();
         }
         return results;
     }
@@ -78,12 +88,7 @@ public class BezierMovement : MovementType
                             waypoints[wp_id].transform.GetChild(1).transform.position,
                             waypoints[wp_id + 1].transform.GetChild(0).transform.position,
                             waypoints[wp_id + 1].transform.position);
-        curveType.DrawDebugCurve(0.1f, 1);
-
-        //print("P0: " + way_points[wp_id].transform.position +
-        //      "P1: " + way_points[wp_id].transform.GetChild(1).transform.position +
-        //      "P2: " + way_points[wp_id + 1].transform.GetChild(0).transform.position +
-        //      "P3: " + way_points[wp_id + 1].transform.position);
+        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
 
         Vector3 results = curveType.Evaluate(distCovered);
         MonoBehaviour.print("Result" + curveType.Evaluate(distCovered));
@@ -91,14 +96,7 @@ public class BezierMovement : MovementType
 
         if (distCovered >= 1)
         {
-            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
-            wp_id++;
-            startTime = Time.time;
-            if (wp_id == waypoints.Length - 1)
-            {
-
-                wp_id = 0;
-            }
+            finishedSection();
         }
         return results;
     }
@@ -113,23 +111,32 @@ public class BSplineMovement : MovementType
     override public Vector3 moveCamera()
     {
         distCovered = (Time.time - startTime) * speed;
-        //c = new B3SplineCurve(way_points[wp_id].transform.position,
-        //                   way_points[wp_id].transform.GetChild(1).transform.position,
-        //                   way_points[wp_id + 1].transform.GetChild(0).transform.position,
-        //                   way_points[wp_id + 1].transform.position);
 
-        curveType = new B3SplineCurve(waypoints[0].transform.position,
-                                waypoints[1].transform.position,
-                                waypoints[2].transform.position,
-                                waypoints[3].transform.position
 
-                           );
-        curveType.DrawDebugCurve(0.1f, 1);
+        List<Vector3> tpositions = new List<Vector3>();
 
-        MonoBehaviour.print("P0: " + waypoints[wp_id].transform.position +
-              "P1: " + waypoints[wp_id].transform.GetChild(1).transform.position +
-              "P2: " + waypoints[wp_id + 1].transform.GetChild(0).transform.position +
-              "P3: " + waypoints[wp_id + 1].transform.position);
+        tpositions.Add(waypoints[0].transform.position + (waypoints[0].transform.forward * 10));
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            tpositions.Add(waypoints[i].transform.position);
+        }
+        tpositions.Add(waypoints[waypoints.Length - 1].transform.position + (waypoints[waypoints.Length - 1].transform.forward * 10));
+
+
+        //curveType = new B3SplineCurve(tpositions[wp_id],
+        //                              tpositions[wp_id+1],
+        //                              tpositions[wp_id+2],
+        //                              tpositions[wp_id+3]);
+
+
+        //curveType = new B3SplineCurve(tpositions[0],
+        //                              tpositions[1],
+        //                              tpositions[2],
+        //                              tpositions[3]);
+
+        curveType = new B3SplineCurve(waypoints[0].transform.position, waypoints[1].transform.position, waypoints[2].transform.position, waypoints[3].transform.position);
+
+        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
 
         Vector3 results = curveType.Evaluate(distCovered);
 
@@ -137,13 +144,7 @@ public class BSplineMovement : MovementType
 
         if (distCovered >= 1)
         {
-            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
-            wp_id++;
-            startTime = Time.time;
-            if (wp_id == waypoints.Length - 1)
-            {
-                wp_id = 0;
-            }
+            finishedSection();
         }
         return results;
     }
@@ -168,18 +169,12 @@ public class HermitMovement : MovementType
                                     waypoints[wp_id + 1].transform.forward*angular_scalar);
         Vector3 results = curveType.Evaluate(distCovered);
 
-        curveType.DrawDebugCurve(0.1f,1);
+        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
 
 
         if (distCovered >= 1)
         {
-            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
-            wp_id++;
-            startTime = Time.time;
-            if (wp_id == waypoints.Length - 1)
-            {
-                wp_id = 0;
-            }
+            finishedSection();
         }
         return results;
     
@@ -209,19 +204,14 @@ public class CatmullMovement : MovementType
                                 tpositions[wp_id+1],
                                 tpositions[wp_id+2],
                                 tpositions[wp_id+3]);
-        curveType.DrawDebugCurve(0.1f, 1);
+
+        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
         Vector3 results = curveType.Evaluate(distCovered);
 
 
         if (distCovered >= 1)
         {
-            MonoBehaviour.print("Updating Wp_id:.." + wp_id);
-            wp_id++;
-            startTime = Time.time;
-            if (wp_id == tpositions.Count - 3)
-            {
-                wp_id = 0;
-            }
+            finishedSection();
         }
 
         return results;

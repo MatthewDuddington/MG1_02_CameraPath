@@ -14,44 +14,44 @@ public class MovementPatterns : MonoBehaviour {
 
      // Use this for initialization
      void Start () {
-          GameObject[] way_objects = GetComponent<CameraMovement>().waypoints;
-          way_points = new Vector3[way_objects.Length];
-          for (int i = 0; i != way_objects.Length; i++)
-               way_points[i] = way_objects[i].transform.position;
+          //GameObject[] way_objects = GetComponent<CameraMovement>().waypoints;
+          //way_points = new Vector3[way_objects.Length];
+          //for (int i = 0; i != way_objects.Length; i++)
+          //     way_points[i] = way_objects[i].transform.position;
 
-          Curve c;
-          switch (curveType)
-          {
-               case Types.Bezier:
-                    {
-                         c = new BezierCurve(way_points);
-                         c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
-                    }
-                    break;
-               case Types.BSpline3:
-                    if (way_points.Length >= 4)
-                    {
-                         c = new B3SplineCurve(way_points[0], way_points[1], way_points[2], way_points[3]);
-                         c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
-                    }
-                    break;
-               case Types.Hermit:
-                    if (way_points.Length >= 2)
-                    {
-                         c = new HermitCurve(way_points[0], way_points[1], new Vector3(0, 0, 0), new Vector3(-10, 0, 0));
-                         c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
-                    }
-                    break;
-               case Types.CatmullRom:
-                    if (way_points.Length >= 4)
-                    {
-                         c = new CatmullRomCurve(way_points[0], way_points[1], way_points[2], way_points[3]);
-                         c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
-                    }
-                    break;
-               default:
-                    break;
-          }
+          //Curve c;
+          //switch (curveType)
+          //{
+          //     case Types.Bezier:
+          //          {
+          //               c = new BezierCurve(way_points);
+          //               c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
+          //          }
+          //          break;
+          //     case Types.BSpline3:
+          //          if (way_points.Length >= 4)
+          //          {
+          //               c = new B3SplineCurve(way_points[0], way_points[1], way_points[2], way_points[3]);
+          //               c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
+          //          }
+          //          break;
+          //     case Types.Hermit:
+          //          if (way_points.Length >= 2)
+          //          {
+          //               c = new HermitCurve(way_points[0], way_points[1], new Vector3(0, 0, 0), new Vector3(-10, 0, 0));
+          //               c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
+          //          }
+          //          break;
+          //     case Types.CatmullRom:
+          //          if (way_points.Length >= 4)
+          //          {
+          //               c = new CatmullRomCurve(way_points[0], way_points[1], way_points[2], way_points[3]);
+          //               c.DrawDebugCurve(debugDrawingStep, debugVisibilityDuration);
+          //          }
+          //          break;
+          //     default:
+          //          break;
+          //}
 
 
 	}
@@ -165,8 +165,8 @@ public class B3SplineCurve:Curve
      {
           float[] coeff = new float[4];
           coeff[0] = (1 - t) * (1 - t) * (1 - t);
-          coeff[1] = 3 * t * t * t - 6 * t * t + 4;
-          coeff[2] = -3 * t * t * t - 3 * t * t - 3 * t + 1;
+          coeff[1] = 3 * (t * t * t) - 6 * (t * t) + 4;
+          coeff[2] = -3 * (t * t * t) - 3 * (t * t) - 3 * t + 1;
           coeff[3] = t * t * t;
 
           Vector3 result = Vector3.zero;

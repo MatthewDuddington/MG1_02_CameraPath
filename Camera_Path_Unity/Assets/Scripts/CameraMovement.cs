@@ -5,11 +5,10 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
 
-
     public MovementType movement;
 
     public GameObject wp_holder;
-    public GameObject[] waypoints;
+    private GameObject[] waypoints;
 
     void Start()
     {
