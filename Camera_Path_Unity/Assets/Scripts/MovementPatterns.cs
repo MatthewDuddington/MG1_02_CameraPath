@@ -156,8 +156,8 @@ public class B3SplineCurve:Curve
           // so an adjustment required
           // this is called 'imaginary point method'
 
-          p0 = 2 * p0 - p1;
-          p3 = 2 * p3 - p2;
+          points[0] = 6 * p0 - 4 * p1 - p2;
+          points[3] = 6 * p3 - 4 * p2 - p1;
      }
 
      //get value in point t    
@@ -166,7 +166,7 @@ public class B3SplineCurve:Curve
           float[] coeff = new float[4];
           coeff[0] = (1 - t) * (1 - t) * (1 - t);
           coeff[1] = 3 * (t * t * t) - 6 * (t * t) + 4;
-          coeff[2] = -3 * (t * t * t) - 3 * (t * t) - 3 * t + 1;
+          coeff[2] = -3 * (t * t * t) + 3 * (t * t) + 3 * t + 1;
           coeff[3] = t * t * t;
 
           Vector3 result = Vector3.zero;
