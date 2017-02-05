@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\HideDuringPlay.cs" />
     <Compile Include="Assets\Scripts\Mathd.cs" />
     <Compile Include="Assets\Scripts\MovementPatterns.cs" />
+    <Compile Include="Assets\Scripts\MovementType.cs" />
     <Compile Include="Assets\Scripts\PointOfInterest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
