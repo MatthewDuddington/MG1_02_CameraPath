@@ -5,6 +5,12 @@ using System;
 
 public class Mathd {
 
+	//------------------------------------------------------------------------------//
+	//																				//
+	//									Vector3										//
+	//																				//
+	//------------------------------------------------------------------------------//
+
 	public class Vector3 {
 
 		private float x_;
@@ -92,20 +98,18 @@ public class Mathd {
 
 		// Rotates a Vector3 by a Quaterion
 		public Mathd.Vector3 Rotate(Mathd.Quaternion quatRotation) {
-			Mathd.Matrix4 roatationMatrix = new Mathd.Matrix4(
-				1 - (2 * (quatRotation.y * quatRotation.y)) - (2 * (quatRotation.z * quatRotation.z)),
+			Mathd.Matrix3 roatationMatrix = new Mathd.Matrix3(
+				1 - (2 *  (quatRotation.y * quatRotation.y)) - (2 * (quatRotation.z * quatRotation.z)),
 				2 * ((quatRotation.x * quatRotation.y) + (quatRotation.w * quatRotation.z)),
 				2 * ((quatRotation.x * quatRotation.z) - (quatRotation.w * quatRotation.y)),
-				0,
+
 				2 * ((quatRotation.x * quatRotation.y) - (quatRotation.w * quatRotation.z)),
-				1 - (2 * (quatRotation.x * quatRotation.x)) - (2 * (quatRotation.z * quatRotation.z)),
+				1 - (2 *  (quatRotation.x * quatRotation.x)) - (2 * (quatRotation.z * quatRotation.z)),
 				2 * ((quatRotation.x * quatRotation.z) + (quatRotation.w * quatRotation.y)),
-				0,
+
 				2 * ((quatRotation.x * quatRotation.z) + (quatRotation.w * quatRotation.y)),
 				2 * ((quatRotation.y * quatRotation.z) - (quatRotation.w * quatRotation.x)),
-				1 - (2 * (quatRotation.x * quatRotation.x)) - (2 * (quatRotation.y * quatRotation.y)),
-				0,
-				0,0,0,0
+				1 - (2 * (quatRotation.x * quatRotation.x)) - (2 * (quatRotation.y * quatRotation.y))
 			);
 
 			float newX = ( roatationMatrix.col0[0] + roatationMatrix.col0[1] + roatationMatrix.col0[2] ) * x_;
@@ -160,9 +164,75 @@ public class Mathd {
 
 	}
 
+	//------------------------------------------------------------------------------//
+	//																				//
+	//									Matrix3										//
+	//																				//
+	//------------------------------------------------------------------------------//
 
+	public class Matrix3 {
+
+		private float[][] matrix3_ = new float[3][];
+
+		public float[][] rowCol { get { return matrix3_; } set { matrix3_ = value; } }
+
+		public float[] row0 { get { return matrix3_[0]; } set { matrix3_[0] = value; } }
+		public float[] row1 { get { return matrix3_[1]; } set { matrix3_[1] = value; } }
+		public float[] row2 { get { return matrix3_[2]; } set { matrix3_[2] = value; } }
+
+		public float[] col0 {
+			get { return new float[3] {row0[0], row1[0], row2[0]}; }
+			set { row0[0] = value[0]; row1[0] = value[1]; row2[0] = value[2]; }
+		}
+		public float[] col1 {
+			get { return new float[3] {row0[1], row1[1], row2[1]}; }
+			set { row0[1] = value[0]; row1[1] = value[1]; row2[1] = value[2]; }
+		}
+		public float[] col2 {
+			get { return new float[3] {row0[2], row1[2], row2[2]}; }
+			set { row0[2] = value[0]; row1[2] = value[1]; row2[2] = value[2]; }
+		}
+
+
+
+		// CONSTRUCTORS //
+
+		public Matrix3() {
+			row0 = new float[4] {0,0,0,0};
+			row1 = new float[4] {0,0,0,0};
+			row2 = new float[4] {0,0,0,0};
+		}
+
+		public Matrix3(float[] r0, float[] r1, float[] r2) {
+			row0 = r0;
+			row1 = r1;
+			row2 = r2;
+		}
+
+		public Matrix3(float[] c0, float[] c1, float[] c2, bool isColumn) {
+			col0 = c0;
+			col1 = c1;
+			col2 = c2;
+		}
+
+		public Matrix3(float r0c0, float r0c1, float r0c2, float r0c3,
+					   float r1c0, float r1c1, float r1c2, float r1c3,
+					   float r2c0, float r2c1, float r2c2, float r2c3) {
+			matrix3_[0][0] = r0c0; matrix3_[0][1] = r0c1; matrix3_[0][2] = r0c2; matrix3_[0][3] = r0c3;
+			matrix3_[1][0] = r1c0; matrix3_[1][1] = r1c1; matrix3_[1][2] = r1c2; matrix3_[1][3] = r1c3;
+			matrix3_[2][0] = r2c0; matrix3_[2][1] = r2c1; matrix3_[2][2] = r2c2; matrix3_[2][3] = r2c3;
+		}
+
+	}
+
+	//------------------------------------------------------------------------------//
+	//																				//
+	//									Matrix4										//
+	//																				//
+	//------------------------------------------------------------------------------//
 
 	public class Matrix4 {
+
 		private float[][] matrix4_ = new float[4][];
 
 		public float[][] rowCol { get { return matrix4_; } set { matrix4_ = value; } }
@@ -194,10 +264,10 @@ public class Mathd {
 		// CONSTRUCTORS //
 
 		public Matrix4() {
-			row0 = new float[4] {0,0,0,0};;
-			row1 = new float[4] {0,0,0,0};;
-			row2 = new float[4] {0,0,0,0};;
-			row3 = new float[4] {0,0,0,0};;
+			row0 = new float[4] {0,0,0,0};
+			row1 = new float[4] {0,0,0,0};
+			row2 = new float[4] {0,0,0,0};
+			row3 = new float[4] {0,0,0,0};
 		}
 
 		public Matrix4(float[] r0, float[] r1, float[] r2, float[] r3) {
@@ -223,9 +293,14 @@ public class Mathd {
 			matrix4_[2][0] = r2c0; matrix4_[2][1] = r2c1; matrix4_[2][2] = r2c2; matrix4_[2][3] = r2c3;
 			matrix4_[3][0] = r3c0; matrix4_[3][1] = r3c1; matrix4_[3][2] = r3c2; matrix4_[3][3] = r3c3;
 		}
+
 	}
 
-
+	//------------------------------------------------------------------------------//
+	//																				//
+	//									Quaternion									//
+	//																				//
+	//------------------------------------------------------------------------------//
 
 	public class Quaternion {
 
@@ -345,7 +420,11 @@ public class Mathd {
 
 	}
 
-
+	//------------------------------------------------------------------------------//
+	//																				//
+	//								Dual Quaternion									//
+	//																				//
+	//------------------------------------------------------------------------------//
 
 	public class DualQuaternion {
 
