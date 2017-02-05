@@ -7,6 +7,138 @@ public class Mathd {
 
 	//------------------------------------------------------------------------------//
 	//																				//
+	//									Matrix3										//
+	//																				//
+	//------------------------------------------------------------------------------//
+
+	public class Matrix3 {
+
+		private float[][] matrix3_ = new float[3][];
+
+		public float[][] rowCol { get { return matrix3_; } set { matrix3_ = value; } }
+
+		public float[] row0 { get { return matrix3_[0]; } set { matrix3_[0] = value; } }
+		public float[] row1 { get { return matrix3_[1]; } set { matrix3_[1] = value; } }
+		public float[] row2 { get { return matrix3_[2]; } set { matrix3_[2] = value; } }
+
+		public float[] col0 {
+			get { return new float[3] {row0[0], row1[0], row2[0]}; }
+			set { row0[0] = value[0]; row1[0] = value[1]; row2[0] = value[2]; }
+		}
+		public float[] col1 {
+			get { return new float[3] {row0[1], row1[1], row2[1]}; }
+			set { row0[1] = value[0]; row1[1] = value[1]; row2[1] = value[2]; }
+		}
+		public float[] col2 {
+			get { return new float[3] {row0[2], row1[2], row2[2]}; }
+			set { row0[2] = value[0]; row1[2] = value[1]; row2[2] = value[2]; }
+		}
+
+
+
+		// CONSTRUCTORS //
+
+		public Matrix3() {
+			row0 = new float[4] {0,0,0,0};
+			row1 = new float[4] {0,0,0,0};
+			row2 = new float[4] {0,0,0,0};
+		}
+
+		public Matrix3(float[] r0, float[] r1, float[] r2) {
+			row0 = r0;
+			row1 = r1;
+			row2 = r2;
+		}
+
+		public Matrix3(float[] c0, float[] c1, float[] c2, bool isColumn) {
+			col0 = c0;
+			col1 = c1;
+			col2 = c2;
+		}
+
+		public Matrix3(float r0c0, float r0c1, float r0c2,
+					   float r1c0, float r1c1, float r1c2,
+					   float r2c0, float r2c1, float r2c2) {
+			matrix3_[0][0] = r0c0; matrix3_[0][1] = r0c1; matrix3_[0][2] = r0c2;
+			matrix3_[1][0] = r1c0; matrix3_[1][1] = r1c1; matrix3_[1][2] = r1c2;
+			matrix3_[2][0] = r2c0; matrix3_[2][1] = r2c1; matrix3_[2][2] = r2c2;
+		}
+
+	}
+
+	//------------------------------------------------------------------------------//
+	//																				//
+	//									Matrix4										//
+	//																				//
+	//------------------------------------------------------------------------------//
+
+	public class Matrix4 {
+
+		private float[][] matrix4_ = new float[4][];
+
+		public float[][] rowCol { get { return matrix4_; } set { matrix4_ = value; } }
+
+		public float[] row0 { get { return matrix4_[0]; } set { matrix4_[0] = value; } }
+		public float[] row1 { get { return matrix4_[1]; } set { matrix4_[1] = value; } }
+		public float[] row2 { get { return matrix4_[2]; } set { matrix4_[2] = value; } }
+		public float[] row3 { get { return matrix4_[3]; } set { matrix4_[3] = value; } }
+
+		public float[] col0 {
+			get { return new float[4] {row0[0], row1[0], row2[0], row3[0]}; }
+			set { row0[0] = value[0]; row1[0] = value[1]; row2[0] = value[2]; row3[0] = value[3]; }
+		}
+		public float[] col1 {
+			get { return new float[4] {row0[1], row1[1], row2[1], row3[1]}; }
+			set { row0[1] = value[0]; row1[1] = value[1]; row2[1] = value[2]; row3[1] = value[3]; }
+		}
+		public float[] col2 {
+			get { return new float[4] {row0[2], row1[2], row2[2], row3[2]}; }
+			set { row0[2] = value[0]; row1[2] = value[1]; row2[2] = value[2]; row3[2] = value[3]; }
+		}
+		public float[] col3 {
+			get { return new float[4] {row0[3], row1[3], row2[3], row3[3]}; }
+			set { row0[3] = value[0]; row1[3] = value[1]; row2[3] = value[2]; row3[3] = value[3]; }
+		}
+
+
+
+		// CONSTRUCTORS //
+
+		public Matrix4() {
+			row0 = new float[4] {0,0,0,0};
+			row1 = new float[4] {0,0,0,0};
+			row2 = new float[4] {0,0,0,0};
+			row3 = new float[4] {0,0,0,0};
+		}
+
+		public Matrix4(float[] r0, float[] r1, float[] r2, float[] r3) {
+			row0 = r0;
+			row1 = r1;
+			row2 = r2;
+			row3 = r3;
+		}
+
+		public Matrix4(float[] c0, float[] c1, float[] c2, float[] c3, bool isColumn) {
+			col0 = c0;
+			col1 = c1;
+			col2 = c2;
+			col3 = c3;
+		}
+
+		public Matrix4(float r0c0, float r0c1, float r0c2, float r0c3,
+					   float r1c0, float r1c1, float r1c2, float r1c3,
+					   float r2c0, float r2c1, float r2c2, float r2c3,
+					   float r3c0, float r3c1, float r3c2, float r3c3) {
+			matrix4_[0][0] = r0c0; matrix4_[0][1] = r0c1; matrix4_[0][2] = r0c2; matrix4_[0][3] = r0c3;
+			matrix4_[1][0] = r1c0; matrix4_[1][1] = r1c1; matrix4_[1][2] = r1c2; matrix4_[1][3] = r1c3;
+			matrix4_[2][0] = r2c0; matrix4_[2][1] = r2c1; matrix4_[2][2] = r2c2; matrix4_[2][3] = r2c3;
+			matrix4_[3][0] = r3c0; matrix4_[3][1] = r3c1; matrix4_[3][2] = r3c2; matrix4_[3][3] = r3c3;
+		}
+
+	}
+
+	//------------------------------------------------------------------------------//
+	//																				//
 	//									Vector3										//
 	//																				//
 	//------------------------------------------------------------------------------//
@@ -72,6 +204,12 @@ public class Mathd {
 			float newY = vec3.y * scalar;
 			float newZ = vec3.z * scalar;
 			return new Mathd.Vector3(newX, newY, newZ);
+		}
+		static public Mathd.Vector3 operator *(float scalar, Mathd.Vector3 vec3) {
+			return vec3 * scalar;
+		}
+		static public Mathd.Vector3 operator /(Mathd.Vector3 vec3, float scalar) {
+			return vec3 * (1 / scalar);
 		}
 
 
@@ -152,146 +290,20 @@ public class Mathd {
 			return new Mathd.Vector3(newX, newY, z_);
 		}
 
+		// Dot Product
+		// The angle between two vectors
+		// If the same vector is used both sides = magnitude of the vector, squared
 		static public float DotProduct(Mathd.Vector3 lhs, Mathd.Vector3 rhs) {
 		  return ( (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z) );
 		}
 
+		// Cross Product (Left handed)
+		// Normal to the plane defined by the two vectors
+		// Has length = to the area of the parallelogram formed by the two vectors
 		static public Mathd.Vector3 CrossProduct(Mathd.Vector3 lhs, Mathd.Vector3 rhs) {
 			return new Mathd.Vector3( (lhs.y * rhs.z) - (lhs.z * rhs.y),
 									  (lhs.z * rhs.x) - (lhs.x * rhs.z),
 									  (lhs.x * rhs.y) - (lhs.y * rhs.x)  );
-		}
-
-	}
-
-	//------------------------------------------------------------------------------//
-	//																				//
-	//									Matrix3										//
-	//																				//
-	//------------------------------------------------------------------------------//
-
-	public class Matrix3 {
-
-		private float[][] matrix3_ = new float[3][];
-
-		public float[][] rowCol { get { return matrix3_; } set { matrix3_ = value; } }
-
-		public float[] row0 { get { return matrix3_[0]; } set { matrix3_[0] = value; } }
-		public float[] row1 { get { return matrix3_[1]; } set { matrix3_[1] = value; } }
-		public float[] row2 { get { return matrix3_[2]; } set { matrix3_[2] = value; } }
-
-		public float[] col0 {
-			get { return new float[3] {row0[0], row1[0], row2[0]}; }
-			set { row0[0] = value[0]; row1[0] = value[1]; row2[0] = value[2]; }
-		}
-		public float[] col1 {
-			get { return new float[3] {row0[1], row1[1], row2[1]}; }
-			set { row0[1] = value[0]; row1[1] = value[1]; row2[1] = value[2]; }
-		}
-		public float[] col2 {
-			get { return new float[3] {row0[2], row1[2], row2[2]}; }
-			set { row0[2] = value[0]; row1[2] = value[1]; row2[2] = value[2]; }
-		}
-
-
-
-		// CONSTRUCTORS //
-
-		public Matrix3() {
-			row0 = new float[4] {0,0,0,0};
-			row1 = new float[4] {0,0,0,0};
-			row2 = new float[4] {0,0,0,0};
-		}
-
-		public Matrix3(float[] r0, float[] r1, float[] r2) {
-			row0 = r0;
-			row1 = r1;
-			row2 = r2;
-		}
-
-		public Matrix3(float[] c0, float[] c1, float[] c2, bool isColumn) {
-			col0 = c0;
-			col1 = c1;
-			col2 = c2;
-		}
-
-		public Matrix3(float r0c0, float r0c1, float r0c2, float r0c3,
-					   float r1c0, float r1c1, float r1c2, float r1c3,
-					   float r2c0, float r2c1, float r2c2, float r2c3) {
-			matrix3_[0][0] = r0c0; matrix3_[0][1] = r0c1; matrix3_[0][2] = r0c2; matrix3_[0][3] = r0c3;
-			matrix3_[1][0] = r1c0; matrix3_[1][1] = r1c1; matrix3_[1][2] = r1c2; matrix3_[1][3] = r1c3;
-			matrix3_[2][0] = r2c0; matrix3_[2][1] = r2c1; matrix3_[2][2] = r2c2; matrix3_[2][3] = r2c3;
-		}
-
-	}
-
-	//------------------------------------------------------------------------------//
-	//																				//
-	//									Matrix4										//
-	//																				//
-	//------------------------------------------------------------------------------//
-
-	public class Matrix4 {
-
-		private float[][] matrix4_ = new float[4][];
-
-		public float[][] rowCol { get { return matrix4_; } set { matrix4_ = value; } }
-
-		public float[] row0 { get { return matrix4_[0]; } set { matrix4_[0] = value; } }
-		public float[] row1 { get { return matrix4_[1]; } set { matrix4_[1] = value; } }
-		public float[] row2 { get { return matrix4_[2]; } set { matrix4_[2] = value; } }
-		public float[] row3 { get { return matrix4_[3]; } set { matrix4_[3] = value; } }
-
-		public float[] col0 {
-			get { return new float[4] {row0[0], row1[0], row2[0], row3[0]}; }
-			set { row0[0] = value[0]; row1[0] = value[1]; row2[0] = value[2]; row3[0] = value[3]; }
-		}
-		public float[] col1 {
-			get { return new float[4] {row0[1], row1[1], row2[1], row3[1]}; }
-			set { row0[1] = value[0]; row1[1] = value[1]; row2[1] = value[2]; row3[1] = value[3]; }
-		}
-		public float[] col2 {
-			get { return new float[4] {row0[2], row1[2], row2[2], row3[2]}; }
-			set { row0[2] = value[0]; row1[2] = value[1]; row2[2] = value[2]; row3[2] = value[3]; }
-		}
-		public float[] col3 {
-			get { return new float[4] {row0[3], row1[3], row2[3], row3[3]}; }
-			set { row0[3] = value[0]; row1[3] = value[1]; row2[3] = value[2]; row3[3] = value[3]; }
-		}
-
-
-
-		// CONSTRUCTORS //
-
-		public Matrix4() {
-			row0 = new float[4] {0,0,0,0};
-			row1 = new float[4] {0,0,0,0};
-			row2 = new float[4] {0,0,0,0};
-			row3 = new float[4] {0,0,0,0};
-		}
-
-		public Matrix4(float[] r0, float[] r1, float[] r2, float[] r3) {
-			row0 = r0;
-			row1 = r1;
-			row2 = r2;
-			row3 = r3;
-		}
-
-		public Matrix4(float[] c0, float[] c1, float[] c2, float[] c3, bool isColumn) {
-			col0 = c0;
-			col1 = c1;
-			col2 = c2;
-			col3 = c3;
-		}
-
-		public Matrix4(float r0c0, float r0c1, float r0c2, float r0c3,
-					   float r1c0, float r1c1, float r1c2, float r1c3,
-					   float r2c0, float r2c1, float r2c2, float r2c3,
-					   float r3c0, float r3c1, float r3c2, float r3c3) {
-			matrix4_[0][0] = r0c0; matrix4_[0][1] = r0c1; matrix4_[0][2] = r0c2; matrix4_[0][3] = r0c3;
-			matrix4_[1][0] = r1c0; matrix4_[1][1] = r1c1; matrix4_[1][2] = r1c2; matrix4_[1][3] = r1c3;
-			matrix4_[2][0] = r2c0; matrix4_[2][1] = r2c1; matrix4_[2][2] = r2c2; matrix4_[2][3] = r2c3;
-			matrix4_[3][0] = r3c0; matrix4_[3][1] = r3c1; matrix4_[3][2] = r3c2; matrix4_[3][3] = r3c3;
 		}
 
 	}
@@ -350,16 +362,33 @@ public class Mathd {
 		static public Mathd.Quaternion operator *(Mathd.Quaternion quat, float scalar) {
 			return new Quaternion(quat.scalar * scalar, quat.vector * scalar);
 		}
+		static public Mathd.Quaternion operator *(float scalar, Mathd.Quaternion quat) {
+			return quat * scalar;
+		}
+		static public Mathd.Quaternion operator /(Mathd.Quaternion quat, float scalar) {
+			return quat * (1 / scalar);
+		}
 
-		// Multiply
-		// Equation reference from: http://uk.mathworks.com/help/aeroblks/quaternionmultiplication.html
+		// Multiple a.k.a. Quaternion Product
+		// Note: Non-commutative!
 		static public Mathd.Quaternion operator *(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
+			/*/  // Switch
+			float newScalarPart = (lhs.scalar * rhs.scalar) - (Vector3.DotProduct(lhs.vector, rhs.vector));
+			Mathd.Vector3 newVectorPart = new Mathd.Vector3(Quaternion.CrossProduct(lhs, rhs));
+
+			return new Quaternion(newScalarPart, newVectorPart);
+
+			/*/  //
+
+			// Not sure this is right?
+			// Equation reference from: http://uk.mathworks.com/help/aeroblks/quaternionmultiplication.html
 			float newW = (lhs.w * rhs.w) - (lhs.x * rhs.x) - (lhs.y * rhs.y) - (lhs.z * rhs.z);
 			float newX = (lhs.w * rhs.x) - (lhs.x * rhs.w) - (lhs.y * rhs.z) - (lhs.z * rhs.y);
 			float newY = (lhs.w * rhs.y) - (lhs.x * rhs.z) - (lhs.y * rhs.w) - (lhs.z * rhs.x);
 			float newZ = (lhs.w * rhs.z) - (lhs.x * rhs.y) - (lhs.y * rhs.x) - (lhs.z * rhs.w);
 
 			return new Quaternion(newW, newX, newY, newZ);
+			//*/
 		}
 		
 		// Divide
@@ -383,7 +412,10 @@ public class Mathd {
 
 		// Magnitude a.k.a. Norm
 		public float magnitude {
-			get { return (float) Math.Sqrt( (scalar_ * scalar_) + (vector_.x * vector_.x) + (vector_.y * vector_.y) + (vector_.z * vector_.z) ); }
+			get { 
+				return (float) Math.Sqrt( Quaternion.DotProduct(this, this) );
+				// (float) Math.Sqrt( (scalar_ * scalar_) + (vector_.x * vector_.x) + (vector_.y * vector_.y) + (vector_.z * vector_.z) );
+			}
 		}
 
 
@@ -410,12 +442,27 @@ public class Mathd {
 			}
 		}
 
-		static public float DotProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-			return 1;
+		// Invert
+		// Multiplicative inverse 
+		public Mathd.Quaternion invert {
+			get {
+				float this_DotProduct = Quaternion.DotProduct(this, this);
+				return new Mathd.Quaternion( scalar / this_DotProduct, -1f * (vector * (1 / this_DotProduct)) );
+			}
 		}
 
+		// Dot Product
+		// The angle between two quaternions
+		// If the same quaternion is used both sides = magnitude of the quaternion, squared
+		static public float DotProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
+			return (lhs.scalar * rhs.scalar) + Vector3.DotProduct(lhs.vector, rhs.vector);
+			// (lhs.w * rhs.w) + (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z + rhs.z);
+		}
+
+		// Cross Product (Left handed)
+		// Note: Not the same as the quaternion product
 		static public Mathd.Quaternion CrossProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-			return new Mathd.Quaternion(0, Mathd.Vector3.zero);
+			return new Mathd.Quaternion(0, Vector3.CrossProduct(lhs.vector, rhs.vector));
 		}
 
 	}
