@@ -31,14 +31,14 @@ public class Mathd {
 			z_ = vec3.z;
 		}
 
-		public Mathd.Vector3 zero	  { get { return new Mathd.Vector3( 0,  0,  0); } }
-		public Mathd.Vector3 one	  { get { return new Mathd.Vector3( 1,  1,  1); } }
-		public Mathd.Vector3 right	  { get { return new Mathd.Vector3( 1,  0,  0); } }
-		public Mathd.Vector3 left	  { get { return new Mathd.Vector3(-1,  0,  0); } }
-		public Mathd.Vector3 up		  { get { return new Mathd.Vector3( 0,  1,  0); } }
-		public Mathd.Vector3 down 	  { get { return new Mathd.Vector3( 0, -1,  0); } }
-		public Mathd.Vector3 forward  { get { return new Mathd.Vector3( 0,  0,  1); } }
-		public Mathd.Vector3 backward { get { return new Mathd.Vector3( 0,  0, -1); } }
+		static public Mathd.Vector3 zero	 { get { return new Mathd.Vector3( 0,  0,  0); } }
+		static public Mathd.Vector3 one		 { get { return new Mathd.Vector3( 1,  1,  1); } }
+		static public Mathd.Vector3 right	 { get { return new Mathd.Vector3( 1,  0,  0); } }
+		static public Mathd.Vector3 left	 { get { return new Mathd.Vector3(-1,  0,  0); } }
+		static public Mathd.Vector3 up		 { get { return new Mathd.Vector3( 0,  1,  0); } }
+		static public Mathd.Vector3 down 	 { get { return new Mathd.Vector3( 0, -1,  0); } }
+		static public Mathd.Vector3 forward  { get { return new Mathd.Vector3( 0,  0,  1); } }
+		static public Mathd.Vector3 backward { get { return new Mathd.Vector3( 0,  0, -1); } }
 
 
 
@@ -117,8 +117,8 @@ public class Mathd {
 
 		// Rotates a Vector3 around axis X by degrees (Left handed)
 		public Mathd.Vector3 RotateX(float degrees) {
-			float sinTheta = Math.Sin(degrees);
-			float cosTheta = Math.Cos(degrees);
+			float sinTheta = (float) Math.Sin(degrees);
+			float cosTheta = (float) Math.Cos(degrees);
 
 			float newY = (y_ * cosTheta) - (z_ * sinTheta);
 			float newZ = (y_ * sinTheta) + (z_ * cosTheta);
@@ -128,8 +128,8 @@ public class Mathd {
 
 		// Rotates a Vector3 around axis Y by degrees (Left handed)
 		public Mathd.Vector3 RotateY(float degrees) {
-			float sinTheta = Math.Sin(degrees);
-			float cosTheta = Math.Cos(degrees);
+			float sinTheta = (float) Math.Sin(degrees);
+			float cosTheta = (float) Math.Cos(degrees);
 
 			float newX =   (x_ * cosTheta) + (z_ * sinTheta);
 			float newZ = - (x_ * sinTheta) + (z_ * cosTheta);
@@ -139,8 +139,8 @@ public class Mathd {
 
 		// Rotates a Vector3 around axis Z by degrees (Left handed)
 		public Mathd.Vector3 RotateZ(float degrees) {
-			float sinTheta = Math.Sin(degrees);
-			float cosTheta = Math.Cos(degrees);
+			float sinTheta = (float) Math.Sin(degrees);
+			float cosTheta = (float) Math.Cos(degrees);
 
 			float newX = (x_ * cosTheta) - (y_ * sinTheta);
 			float newY = (x_ * sinTheta) + (y_ * cosTheta);
@@ -163,7 +163,7 @@ public class Mathd {
 
 
 	public class Matrix4 {
-		private float[][] matrix4_ = new float[4][4];
+		private float[][] matrix4_ = new float[4][];
 
 		public float[][] rowCol { get { return matrix4_; } set { matrix4_ = value; } }
 
@@ -173,19 +173,19 @@ public class Mathd {
 		public float[] row3 { get { return matrix4_[3]; } set { matrix4_[3] = value; } }
 
 		public float[] col0 {
-			get { return new float[4] (row0[0], row1[0], row2[0], row3[0]); }
+			get { return new float[4] {row0[0], row1[0], row2[0], row3[0]}; }
 			set { row0[0] = value[0]; row1[0] = value[1]; row2[0] = value[2]; row3[0] = value[3]; }
 		}
 		public float[] col1 {
-			get { return new float[4] (row0[1], row1[1], row2[1], row3[1]); }
+			get { return new float[4] {row0[1], row1[1], row2[1], row3[1]}; }
 			set { row0[1] = value[0]; row1[1] = value[1]; row2[1] = value[2]; row3[1] = value[3]; }
 		}
 		public float[] col2 {
-			get { return new float[4] (row0[2], row1[2], row2[2], row3[2]); }
+			get { return new float[4] {row0[2], row1[2], row2[2], row3[2]}; }
 			set { row0[2] = value[0]; row1[2] = value[1]; row2[2] = value[2]; row3[2] = value[3]; }
 		}
 		public float[] col3 {
-			get { return new float[4] (row0[3], row1[3], row2[3], row3[3]); }
+			get { return new float[4] {row0[3], row1[3], row2[3], row3[3]}; }
 			set { row0[3] = value[0]; row1[3] = value[1]; row2[3] = value[2]; row3[3] = value[3]; }
 		}
 
@@ -194,10 +194,10 @@ public class Mathd {
 		// CONSTRUCTORS //
 
 		public Matrix4() {
-			row0 = new float[4] (0,0,0,0);;
-			row1 = new float[4] (0,0,0,0);;
-			row2 = new float[4] (0,0,0,0);;
-			row3 = new float[4] (0,0,0,0);;
+			row0 = new float[4] {0,0,0,0};;
+			row1 = new float[4] {0,0,0,0};;
+			row2 = new float[4] {0,0,0,0};;
+			row3 = new float[4] {0,0,0,0};;
 		}
 
 		public Matrix4(float[] r0, float[] r1, float[] r2, float[] r3) {
@@ -207,7 +207,7 @@ public class Mathd {
 			row3 = r3;
 		}
 
-		public Matrix4(float c0, float[] c1, float[] c2, float[] c3) {
+		public Matrix4(float[] c0, float[] c1, float[] c2, float[] c3, bool isColumn) {
 			col0 = c0;
 			col1 = c1;
 			col2 = c2;
@@ -336,15 +336,11 @@ public class Mathd {
 		}
 
 		static public float DotProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-			
+			return 1;
 		}
 
 		static public Mathd.Quaternion CrossProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-
-		}
-
-		static public float DotProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-			
+			return new Mathd.Quaternion(0, Mathd.Vector3.zero);
 		}
 
 	}
@@ -368,9 +364,9 @@ public class Mathd {
 			dual = new Quaternion(0,0,0,0);
 		}
 
-		DualQuaternion (Quaternion real, Quaternion dual) {
-			real = real / real.magnitude; // TODO Normalised needed?
-			dual = dual;
+		DualQuaternion (Quaternion real_part, Quaternion dual_part) {
+			real = real_part * (1 / real_part.magnitude); // TODO Normalised needed?
+			dual = dual_part;
 		}
 
 		DualQuaternion (float real_w, float real_x, float real_y, float real_z,
@@ -407,7 +403,7 @@ public class Mathd {
 		// Magnitude TODO Check
 		public float magnitude {
 			get {
-				Math.Sqrt(Mathd.Quaternion.DotProduct(this.real, this.real));
+				return (float) Math.Sqrt(Mathd.Quaternion.DotProduct(this.real, this.real));
 			}
 		}
 		
