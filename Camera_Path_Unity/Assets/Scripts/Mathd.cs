@@ -168,6 +168,11 @@ public class Mathd {
 			y_ = vec3.y;
 			z_ = vec3.z;
 		}
+		public Vector3 (UnityEngine.Vector3 vec3) {
+			x_ = vec3.x;
+			y_ = vec3.y;
+			z_ = vec3.z;
+		}
 
 		static public Mathd.Vector3 zero	 { get { return new Mathd.Vector3( 0,  0,  0); } }
 		static public Mathd.Vector3 one		 { get { return new Mathd.Vector3( 1,  1,  1); } }
@@ -177,6 +182,10 @@ public class Mathd {
 		static public Mathd.Vector3 down 	 { get { return new Mathd.Vector3( 0, -1,  0); } }
 		static public Mathd.Vector3 forward  { get { return new Mathd.Vector3( 0,  0,  1); } }
 		static public Mathd.Vector3 backward { get { return new Mathd.Vector3( 0,  0, -1); } }
+
+		public UnityEngine.Vector3 toUnityVec3 {
+			get { return new UnityEngine.Vector3(x, y, z); }
+		}
 
 
 
@@ -344,6 +353,26 @@ public class Mathd {
 			vector_ = xyz;
 		}
 
+		public Quaternion(Mathd.Quaternion quat) {
+			scalar_   = quat.w;
+			vector_.x = quat.x;
+			vector_.y = quat.y;
+			vector_.z = quat.z;
+		}
+		public Quaternion(UnityEngine.Quaternion quat) {
+			scalar_   = quat.w;
+			vector_.x = quat.x;
+			vector_.y = quat.y;
+			vector_.z = quat.z;
+		}
+
+		static public Quaternion zero { get { return new Quaternion(0,0,0,0); } }
+		static public Quaternion identity { get { return new Quaternion(1,0,0,0); } }
+
+		public  UnityEngine.Quaternion toUnityQuat {
+			get { return new UnityEngine.Quaternion(x, y, z, w); }
+		}
+
 
 
 		// ARETHMETIC OPERATIONS //
@@ -387,7 +416,7 @@ public class Mathd {
 			float newY = (lhs.w * rhs.y) - (lhs.x * rhs.z) - (lhs.y * rhs.w) - (lhs.z * rhs.x);
 			float newZ = (lhs.w * rhs.z) - (lhs.x * rhs.y) - (lhs.y * rhs.x) - (lhs.z * rhs.w);
 
-			return new Quaternion(newW, newX, newY, newZ);
+			return new Mathd.Quaternion(newW, newX, newY, newZ);
 			//*/
 		}
 		
@@ -413,7 +442,7 @@ public class Mathd {
 		// Magnitude a.k.a. Norm
 		public float magnitude {
 			get { 
-				return (float) Math.Sqrt( Quaternion.DotProduct(this, this) );
+				return (float) Math.Sqrt( Mathd.Quaternion.DotProduct(this, this) );
 				// (float) Math.Sqrt( (scalar_ * scalar_) + (vector_.x * vector_.x) + (vector_.y * vector_.y) + (vector_.z * vector_.z) );
 			}
 		}
@@ -446,7 +475,7 @@ public class Mathd {
 		// Multiplicative inverse 
 		public Mathd.Quaternion invert {
 			get {
-				float this_DotProduct = Quaternion.DotProduct(this, this);
+				float this_DotProduct = Mathd.Quaternion.DotProduct(this, this);
 				return new Mathd.Quaternion( scalar / this_DotProduct, -1f * (vector * (1 / this_DotProduct)) );
 			}
 		}
@@ -455,14 +484,14 @@ public class Mathd {
 		// The angle between two quaternions
 		// If the same quaternion is used both sides = magnitude of the quaternion, squared
 		static public float DotProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-			return (lhs.scalar * rhs.scalar) + Vector3.DotProduct(lhs.vector, rhs.vector);
+			return (lhs.scalar * rhs.scalar) + Mathd.Vector3.DotProduct(lhs.vector, rhs.vector);
 			// (lhs.w * rhs.w) + (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z + rhs.z);
 		}
 
 		// Cross Product (Left handed)
 		// Note: Not the same as the quaternion product
 		static public Mathd.Quaternion CrossProduct(Mathd.Quaternion lhs, Mathd.Quaternion rhs) {
-			return new Mathd.Quaternion(0, Vector3.CrossProduct(lhs.vector, rhs.vector));
+			return new Mathd.Quaternion(0, Mathd.Vector3.CrossProduct(lhs.vector, rhs.vector));
 		}
 
 	}
@@ -486,19 +515,31 @@ public class Mathd {
 		// CONSTRUCTORS //
 
 		DualQuaternion () {
-			real = new Quaternion(0,0,0,1);
+			real = new Quaternion(1,0,0,0);
 			dual = new Quaternion(0,0,0,0);
 		}
 
 		DualQuaternion (Quaternion real_part, Quaternion dual_part) {
-			real = real_part * (1 / real_part.magnitude); // TODO Normalised needed?
+			// real = real_part * (1 / real_part.magnitude);
+			real = real_part.normalised;
 			dual = dual_part;
 		}
 
 		DualQuaternion (float real_w, float real_x, float real_y, float real_z,
 						float dual_w, float dual_x, float dual_y, float dual_z) {
-			real = new Mathd.Quaternion(real_x, real_y, real_z, real_w);
+			real = new Mathd.Quaternion(real_x, real_y, real_z, real_w).normalised;
 			dual = new Mathd.Quaternion(dual_x, dual_y, dual_z, dual_w);
+		}
+
+		// This is the one to use for building a transform
+		// Based on example from: http://wscg.zcu.cz/wscg2012/short/A29-full.pdf
+		DualQuaternion (Mathd.Vector3 position, Mathd.Quaternion rotation) {
+			real = rotation.normalised;
+			dual = 0.5f * (new Mathd.Quaternion(0, position) * real);
+		}
+		DualQuaternion (UnityEngine.Vector3 position, UnityEngine.Quaternion rotation) {
+			Mathd.Vector3 mathdPos = new Mathd.Vector3(position.x, position.y, position.z);
+			Mathd.Quaternion mathdQuat = new Mathd.Quaternion(rotation.w, rotation.x, rotation.y, rotation.z);
 		}
 
 
@@ -506,49 +547,97 @@ public class Mathd {
 		// ARETHMETIC OPERATIONS //
 
 		// Addition
-		static public DualQuaternion operator +(DualQuaternion lhs, DualQuaternion rhs) {
+		static public Mathd.DualQuaternion operator +(Mathd.DualQuaternion lhs, Mathd.DualQuaternion rhs) {
 			return new DualQuaternion(lhs.real + rhs.real, lhs.dual + rhs.dual);
 		}
 		
 		// Scalar Multiplication
-		static public DualQuaternion operator *(DualQuaternion dualQuat, float scalar) {
+		static public Mathd.DualQuaternion operator *(Mathd.DualQuaternion dualQuat, float scalar) {
 			return new DualQuaternion(dualQuat.real * scalar, dualQuat.dual * scalar);
 		}
+		static public Mathd.DualQuaternion operator *(float scalar, Mathd.DualQuaternion dualQuat) {
+			return dualQuat * scalar;
+		}
 
-		// Multiplication
-		static public DualQuaternion operator *(DualQuaternion lhs, DualQuaternion rhs) {
-			Quaternion realMultiplied = lhs.real * rhs.real;
-			Quaternion dualMultiplied = (lhs.real * rhs.dual) + (lhs.dual * rhs.real);
-			return new DualQuaternion(realMultiplied, dualMultiplied);
+		// Multiplication TODO Does each lhs and rhs need to be reversed for left handed?
+		static public Mathd.DualQuaternion operator *(Mathd.DualQuaternion lhs, Mathd.DualQuaternion rhs) {
+			Mathd.Quaternion realMultiplied = lhs.real * rhs.real;
+			Mathd.Quaternion dualMultiplied = (lhs.real * rhs.dual) + (lhs.dual * rhs.real);
+			return new Mathd.DualQuaternion(realMultiplied, dualMultiplied);
 		}
 
 
 
 		// ATTRIBUTES AND PRODUCTS //
 
-		// Magnitude TODO Check
+		// Magnitude
 		public float magnitude {
 			get {
-				return (float) Math.Sqrt(Mathd.Quaternion.DotProduct(this.real, this.real));
+				float this_real_magnitude = this.real.magnitude;
+				return this_real_magnitude + ( Mathd.Quaternion.DotProduct(this.real, this.dual) / this_real_magnitude );
+
+//				return this * this.conjugate;  // This would also work?
 			}
 		}
 		
 		// Normalise
-		public DualQuaternion normalise {
+		public Mathd.DualQuaternion normalise {
 			get {
 				float this_magnitude = this.magnitude;
-				return new DualQuaternion(real * (1 / this_magnitude), dual * (1 / this_magnitude));
+				return new Mathd.DualQuaternion(this.real / this_magnitude, this.dual / this_magnitude);
+
+//				Mathd.Quaternion newReal = this.real / this_magnitude;
+//				Mathd.Quaternion newDuel = new Mathd.Quaternion(this.real / this_magnitude,
+			}
+		}
+		
+		// Conjugate
+		public Mathd.DualQuaternion conjugate {
+			get {
+				return new Mathd.DualQuaternion(this.real.conjugate, this.dual.conjugate);
 			}
 		}
 
-		/*
-		// Conjugate a.k.a. Inverse - NO ITS NOT TODO
-		static public DualQuaternion Conjugate(DualQuaternion dualQuat) {
-			Quaternion realConjugate = Quaternion.Inverse(dualQuat.real);
-			Quaternion dualConjugate = Quaternion.Inverse(dualQuat.dual);
-			return new DualQuaternion(realConjugate, dualConjugate);
+//		// Conjugate 
+//		static public DualQuaternion Conjugate(DualQuaternion dualQuat) {
+//			Quaternion realConjugate = Quaternion.Inverse(dualQuat.real);
+//			Quaternion dualConjugate = Quaternion.Inverse(dualQuat.dual);
+//			return new DualQuaternion(realConjugate, dualConjugate);
+//		}
+
+
+
+		// TRANSFORM METHODS //
+
+		public Mathd.Vector3 position {
+			get { 
+				Mathd.Quaternion transformQuaternion =  2 * (this.dual * (this.real.conjugate));
+				return new Mathd.Vector3(transformQuaternion.xyz);
+			}
 		}
-		*/
+
+		public Mathd.Quaternion rotation {
+			get { return real; }
+		}
+
+		public UnityEngine.Transform Transform( UnityEngine.Transform unityTransform,
+												UnityEngine.Vector3 endPosition,
+												UnityEngine.Quaternion endRotation ) {
+
+			// Construct the dualquarternions from the transfrom values
+			Mathd.DualQuaternion startTransformDualQuat = new Mathd.DualQuaternion(new Mathd.Vector3(unityTransform.position), new Mathd.Quaternion(unityTransform.rotation));
+			Mathd.DualQuaternion endTransformDualQuat = new Mathd.DualQuaternion(new Mathd.Vector3(endPosition), new Mathd.Quaternion(endRotation));
+
+			// Perform the transform
+			Mathd.DualQuaternion resultingDualQuat = (endTransformDualQuat * startTransformDualQuat) * endTransformDualQuat.conjugate;
+
+			// Extract transform values
+			UnityEngine.Transform resultingTransform = new UnityEngine.GameObject().transform;
+			resultingTransform.position = resultingDualQuat.position.toUnityVec3;
+			resultingTransform.rotation = resultingDualQuat.rotation.toUnityQuat;
+
+			return resultingTransform;
+		}
 
 	}
 
