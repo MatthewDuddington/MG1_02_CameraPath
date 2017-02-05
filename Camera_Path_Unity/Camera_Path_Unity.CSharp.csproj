@@ -76,7 +76,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraLook.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
-    <Compile Include="Assets\Scripts\DualQuaternion.cs" />
     <Compile Include="Assets\Scripts\HideDuringPlay.cs" />
     <Compile Include="Assets\Scripts\Mathd.cs" />
     <Compile Include="Assets\Scripts\MovementPatterns.cs" />
