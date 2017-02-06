@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class MovementType
@@ -10,8 +11,6 @@ public abstract class MovementType
     protected Curve curveType;
 
     public float speed;
-    public float debug_drawing_step = 0.01f;
-    public float debug_duration = 1;
 
     public MovementType() { }
 
@@ -46,6 +45,7 @@ public abstract class MovementType
 
         return tpositions;
     }
+
 }
 
 public class LerpMovement : MovementType
@@ -65,12 +65,11 @@ public class LerpMovement : MovementType
         Vector3 p0 = wps[wp_id].transform.GetChild(0).position;
         Vector3 p1 = wps[wp_id + 1].transform.GetChild(0).position;
 
-        // Calculating the precentage of the journey covered
-        float fracJourney = distCovered / Vector3.Distance(p0, p1);
+        // Calculating the percentage of the journey covered
+        float fracJourney = distCovered / Vector3.Distance(p0,p1);
 
-        // Calcuting the position along the journey
+        // Calculating the position along the journey
         Vector3 results = Vector3.Lerp(p0, p1, fracJourney);
-        Debug.DrawLine(p0, p1, Color.red);
 
         //Check to see if the section has been done and move on to the next set of waypoints
         finishedSection(fracJourney);
@@ -103,16 +102,15 @@ public class BezierMovement : MovementType
         Vector3 h0 = wps[wp_id].transform.GetChild(2).position;
         Vector3 h1 = wps[wp_id + 1].transform.GetChild(1).position;
 
-        // Caluating the position along the curve
-        curveType = new BezierCurve(p0, h0, h1, p1);
-        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
-        Vector3 results = curveType.Evaluate(distCovered);
+        // Calculating the position along the curve
+        Vector3 results = R_Curve.bezier(p0, h0, h1, p1, distCovered);
 
         //Check to see if the section has been done and move on to the next set of waypoints
         finishedSection(distCovered);
 
         return results;
     }
+
 
     // Handles placing the next handle inline with the main and previous handles
     private void c1_snap_handle(GameObject[] wps)
@@ -149,10 +147,7 @@ public class BSplineMovement : MovementType
         Vector3 h1 = wps[wp_id + 1].transform.GetChild(1).position;
 
         // Uses the control points to add the curve data
-        curveType = new B3SplineCurve(p0, h0, h1, p1);
-        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
-
-        Vector3 results = curveType.Evaluate(distCovered);
+        Vector3 results = R_Curve.bSpline(p0, h0, h1, p1, distCovered);
 
         //Check to see if the section has been done and move on to the next set of waypoints
         finishedSection(distCovered);
@@ -185,9 +180,7 @@ public class HermitMovement : MovementType
         Vector3 t1 = -wps[wp_id + 1].transform.GetChild(0).forward * angular_scalar;
 
         // Calculating the current position along the curve
-        curveType = new HermitCurve(p0, p1, t0, t1);
-        Vector3 results = curveType.Evaluate(distCovered);
-        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
+        Vector3 results = R_Curve.hermit(p0, p1, t0, t1, distCovered);
 
         //Check to see if the section has been done and move on to the next set of waypoints
         finishedSection(distCovered);
@@ -209,7 +202,7 @@ public class CatmullMovement : MovementType
     {
         distCovered = (Time.time - startTime) * speed;
 
-        // Extending the waypoint position to handle the ends
+        // Extending the way-point position to handle the ends
         List<Vector3> tpositions = extend_wp(wps);
         Vector3 p0 = tpositions[wp_id];
         Vector3 p1 = tpositions[wp_id + 1];
@@ -217,9 +210,7 @@ public class CatmullMovement : MovementType
         Vector3 p3 = tpositions[wp_id + 3];
 
         // Calculating the position along the curve
-        curveType = new CatmullRomCurve(p0, p1, p2, p3);
-        curveType.DrawDebugCurve(debug_drawing_step, debug_duration);
-        Vector3 results = curveType.Evaluate(distCovered);
+        Vector3 results = R_Curve.catmullRomCurve(p0, p1, p2, p3,distCovered);
 
         //Check to see if the section has been done and move on to the next set of waypoints
         finishedSection(distCovered);

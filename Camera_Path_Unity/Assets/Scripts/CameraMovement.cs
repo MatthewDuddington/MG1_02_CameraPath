@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public enum movementType {lerp, bezier, bSpline, hermit, catmullRom}
+    public enum movementType { lerp, bezier, bSpline, hermit, catmullRom }
 
     [Header("Movement Variables")]
-    public movementType current_movement; 
+    public movementType current_movement;
 
     public MovementType movement;
 
+    public float debugLineDuration = 10.0f; 
+
     public GameObject wp_holder;
+
     private GameObject[] waypoints;
+
+    private Vector3 previous;
 
     [Header("Lerp Specific")]
     public float l_move_speed = 10;
@@ -30,7 +35,7 @@ public class CameraMovement : MonoBehaviour
 
     [Header("Catmull-Rom Specific")]
     public float c_move_speed = 0.5f;
- 
+
     void Start()
     {
         waypoints = new GameObject[wp_holder.transform.childCount];
@@ -55,12 +60,18 @@ public class CameraMovement : MonoBehaviour
                 movement = new CatmullMovement(waypoints, c_move_speed);
                 break;
         }
+
+        previous = waypoints[0].transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position = movement.moveCamera();
+        
+        // Drawing the trail behind the camera to see the debug line 
+        Debug.DrawLine(previous, transform.position, Color.black,debugLineDuration);
+        previous = transform.position;
+      
     }
 }
-
