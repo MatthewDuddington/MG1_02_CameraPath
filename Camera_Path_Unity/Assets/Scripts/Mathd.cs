@@ -1,8 +1,4 @@
-﻿// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-using System;
-
+﻿
 public class Mathd {
 
 	//------------------------------------------------------------------------------//
@@ -228,7 +224,7 @@ public class Mathd {
 		// Magnitude a.k.a. Norm
 		public float magnitude { 
 			// Inefficient sqrt version
-			get { return (float) Math.Sqrt( (x_ * x_) + (y_ * y_) + (z_ * z_) ); } 
+			get { return (float) System.Math.Sqrt( (x_ * x_) + (y_ * y_) + (z_ * z_) ); } 
 		}
 
 		// Normalised a.k.a. Unit length
@@ -268,8 +264,8 @@ public class Mathd {
 
 		// Rotates a Vector3 around axis X by degrees (Left handed)
 		public Mathd.Vector3 RotateX(float degrees) {
-			float sinTheta = (float) Math.Sin(degrees);
-			float cosTheta = (float) Math.Cos(degrees);
+			float sinTheta = (float) System.Math.Sin(degrees);
+			float cosTheta = (float) System.Math.Cos(degrees);
 
 			float newY = (y_ * cosTheta) - (z_ * sinTheta);
 			float newZ = (y_ * sinTheta) + (z_ * cosTheta);
@@ -279,8 +275,8 @@ public class Mathd {
 
 		// Rotates a Vector3 around axis Y by degrees (Left handed)
 		public Mathd.Vector3 RotateY(float degrees) {
-			float sinTheta = (float) Math.Sin(degrees);
-			float cosTheta = (float) Math.Cos(degrees);
+			float sinTheta = (float) System.Math.Sin(degrees);
+			float cosTheta = (float) System.Math.Cos(degrees);
 
 			float newX =   (x_ * cosTheta) + (z_ * sinTheta);
 			float newZ = - (x_ * sinTheta) + (z_ * cosTheta);
@@ -290,8 +286,8 @@ public class Mathd {
 
 		// Rotates a Vector3 around axis Z by degrees (Left handed)
 		public Mathd.Vector3 RotateZ(float degrees) {
-			float sinTheta = (float) Math.Sin(degrees);
-			float cosTheta = (float) Math.Cos(degrees);
+			float sinTheta = (float) System.Math.Sin(degrees);
+			float cosTheta = (float) System.Math.Cos(degrees);
 
 			float newX = (x_ * cosTheta) - (y_ * sinTheta);
 			float newY = (x_ * sinTheta) + (y_ * cosTheta);
@@ -320,10 +316,14 @@ public class Mathd {
 			return new Mathd.Vector3(end - start).magnitude;
 		}
 
-		// TODO
-//		// Linear Interpolation between two points
-//		static public Mathd.Vector3 Lerp(
-
+		// Linear Interpolation between two points
+		// Implementation adapted from: http://www.blueraja.com/blog/404/how-to-use-unity-3ds-linear-interpolation-vector3-lerp-correctly#comment-23334
+		static public Mathd.Vector3 Lerp(Mathd.Vector3 start, Mathd.Vector3 end, float t) {
+			// Ensure requested distance along interpolation is between 0 and 1
+			t = UnityEngine.Mathf.Clamp01(t);
+			// Method guarantees the return will equal the end position when t = 1
+			return new Mathd.Vector3((1 - t) * start) + (t * end);
+		}
 
 	}
 
@@ -447,16 +447,13 @@ public class Mathd {
 
 		// ATTRIBUTES AND PRODUCTS //
 
-		// Equation references: http://mathworld.wolfram.com/Quaternion.html
-
 		// Magnitude a.k.a. Norm
 		public float magnitude {
 			get { 
-				return (float) Math.Sqrt( Mathd.Quaternion.DotProduct(this, this) );
+				return (float) System.Math.Sqrt( Mathd.Quaternion.DotProduct(this, this) );
 				// (float) Math.Sqrt( (scalar_ * scalar_) + (vector_.x * vector_.x) + (vector_.y * vector_.y) + (vector_.z * vector_.z) );
 			}
 		}
-
 
 		// Normalise
 		// Equation referenced from: http://uk.mathworks.com/help/aeroblks/quaternionnormalize.html
