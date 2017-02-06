@@ -24,7 +24,7 @@ public class CameraLook : MonoBehaviour {
 		float[] weights = new float[pois.Length];
 		for (int i = 0; i < pois.Length; i++) {
 			float distanceFromPoI = Vector3.Magnitude(pois[i].transform.position - transform.position);
-			print (distanceFromPoI);
+			// print (distanceFromPoI);
 			if (distanceFromPoI <= pois[i].AreaOfInterestRadius()) {
 				float weight = distanceFromPoI / pois[i].AreaOfInterestRadius();
 				// Use Hermet cuve Y value to 'cushion' the approach and exit from PoIs

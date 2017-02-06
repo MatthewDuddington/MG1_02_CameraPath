@@ -315,6 +315,16 @@ public class Mathd {
 									  (lhs.x * rhs.y) - (lhs.y * rhs.x)  );
 		}
 
+		// Distance between two points
+		static public float Distance(Mathd.Vector3 start, Mathd.Vector3 end) {
+			return new Mathd.Vector3(end - start).magnitude;
+		}
+
+		// TODO
+//		// Linear Interpolation between two points
+//		static public Mathd.Vector3 Lerp(
+
+
 	}
 
 	//------------------------------------------------------------------------------//
