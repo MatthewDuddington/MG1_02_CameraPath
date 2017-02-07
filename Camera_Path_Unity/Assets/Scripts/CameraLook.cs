@@ -13,8 +13,8 @@ public class CameraLook : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		//cushioningCurve = new HermitCurve(Vector3.zero, new Vector3(1,1,0), new Vector3(2f,0,0), new Vector3(-3f,0,0));
-		//cushioningCurve.DrawDebugCurve(0.1f, 100);
+//		cushioningCurve = new HermitCurve(Vector3.zero, new Vector3(1,1f,0), new Vector3(3f,-0.5f,0), new Vector3(-3f,0.5f,0));
+//		cushioningCurve.DrawDebugCurve(0.1f, 100);
 	}
 	
 	// Update is called once per frame
@@ -28,7 +28,7 @@ public class CameraLook : MonoBehaviour {
 			if (distanceFromPoI <= pois[i].AreaOfInterestRadius()) {
 				float weight = distanceFromPoI / pois[i].AreaOfInterestRadius();
 				// Use Hermet cuve Y value to 'cushion' the approach and exit from PoIs
-				weight = R_Curve.hermit(Vector3.zero, new Vector3(1,1,0), new Vector3(2f,0,0), new Vector3(-3f,0,0), weight).y;
+				weight = R_Curve.hermit(Vector3.zero, new Vector3(1,1,0), new Vector3(3f,-0.5f,0), new Vector3(-3f,0.5f,0), weight).y;
 				weight = 1 - weight;
 				weights[i] = weight;
 			}
