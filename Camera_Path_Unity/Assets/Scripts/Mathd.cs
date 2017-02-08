@@ -82,6 +82,7 @@ namespace Mathd {
 	public class Matrix4 {
 
 		private float[][] matrix4_ = new float[4][];
+//		private Mathd.Vector4[] matrix4_ = new Vector4[4];
 
 		public float[][] rowCol { get { return matrix4_; } set { matrix4_ = value; } }
 
@@ -143,6 +144,7 @@ namespace Mathd {
 								   0,0,0,0);
 			}
 		}
+
 		public static Matrix4 intentity {
 			get {
 				return new Matrix4(1,0,0,0,
@@ -152,6 +154,35 @@ namespace Mathd {
 			}
 		}
 
+
+
+		// ARETHMETIC OPERATIONS //
+
+		// Add
+//		static public Matrix4 operator* (Mathd.Matrix4 lhs, Mathd.Matrix4 rhs) {
+//
+//		}
+
+		// Subtract
+//		static public Matrix4 operator* (Mathd.Matrix4 lhs, Mathd.Matrix4 rhs) {
+//
+//		}
+
+		// Multiply by Scalar
+//		static public Matrix4 operator* (Mathd.Matrix4 lhs, float scalar) {
+//
+//		}
+
+		// Multiply by Vector4
+//		static public Matrix4 operator* (Mathd.Matrix4 lhs, Mathd.Vector4 rhs) {
+//
+//		}
+
+		// Multiply by Matrix4
+//		static public Matrix4 operator* (Mathd.Matrix4 lhs, Mathd.Matrix4 rhs) {
+//
+//		}
+		
 	}
 
 
@@ -210,8 +241,7 @@ namespace Mathd {
 
 		public UnityEngine.Vector3 toUnityVec3 {
 			get { 
-			UnityEngine.MonoBehaviour.print("x = " + x + " y = " + y + " z = " + z);
-			return new UnityEngine.Vector3(x, y, z);
+				return new UnityEngine.Vector3(x, y, z);
 			}
 		}
 
@@ -256,7 +286,7 @@ namespace Mathd {
 		// Magnitude a.k.a. Norm
 		public float magnitude { 
 			// Inefficient sqrt version
-			get { return (float) System.Math.Sqrt( (x_ * x_) + (y_ * y_) + (z_ * z_) ); } 
+			get { return (float) System.Math.Sqrt( (x * x) + (y * y) + (z * z) ); } 
 		}
 
 		// Normalised a.k.a. Unit length
@@ -264,7 +294,7 @@ namespace Mathd {
 			// Inefficient divide version
 			get { 
 				float this_magnitude = this.magnitude; 
-				return new Mathd.Vector3( x_ / this_magnitude, y_ / this_magnitude, z_ / this_magnitude );
+				return new Mathd.Vector3( x / this_magnitude, y / this_magnitude, z / this_magnitude );
 			}
 
 			// Normalised vector calculation which avoids division (try this later?)
@@ -287,9 +317,9 @@ namespace Mathd {
 				1 - (2 * (quatRotation.x * quatRotation.x)) - (2 * (quatRotation.y * quatRotation.y))
 			);
 
-			float newX = ( roatationMatrix.col0[0] + roatationMatrix.col0[1] + roatationMatrix.col0[2] ) * x_;
-			float newY = ( roatationMatrix.col1[0] + roatationMatrix.col1[1] + roatationMatrix.col1[2] ) * y_;
-			float newZ = ( roatationMatrix.col2[0] + roatationMatrix.col2[1] + roatationMatrix.col2[2] ) * x_;
+			float newX = ( roatationMatrix.col0[0] + roatationMatrix.col0[1] + roatationMatrix.col0[2] ) * x;
+			float newY = ( roatationMatrix.col1[0] + roatationMatrix.col1[1] + roatationMatrix.col1[2] ) * y;
+			float newZ = ( roatationMatrix.col2[0] + roatationMatrix.col2[1] + roatationMatrix.col2[2] ) * x;
 
 			return new Mathd.Vector3(newX, newY, newZ);
 		}
@@ -299,10 +329,10 @@ namespace Mathd {
 			float sinTheta = (float) System.Math.Sin(degrees);
 			float cosTheta = (float) System.Math.Cos(degrees);
 
-			float newY = (y_ * cosTheta) - (z_ * sinTheta);
-			float newZ = (y_ * sinTheta) + (z_ * cosTheta);
+			float newY = (y * cosTheta) - (z * sinTheta);
+			float newZ = (y * sinTheta) + (z * cosTheta);
 
-			return new Mathd.Vector3(x_, newY, newZ);
+			return new Mathd.Vector3(x, newY, newZ);
 		}
 
 		// Rotates a Vector3 around axis Y by degrees (Left handed)
@@ -310,10 +340,10 @@ namespace Mathd {
 			float sinTheta = (float) System.Math.Sin(degrees);
 			float cosTheta = (float) System.Math.Cos(degrees);
 
-			float newX =   (x_ * cosTheta) + (z_ * sinTheta);
-			float newZ = - (x_ * sinTheta) + (z_ * cosTheta);
+			float newX =   (x * cosTheta) + (z * sinTheta);
+			float newZ = - (x * sinTheta) + (z * cosTheta);
 
-			return new Mathd.Vector3(newX, y_, newZ);
+			return new Mathd.Vector3(newX, y, newZ);
 		}
 
 		// Rotates a Vector3 around axis Z by degrees (Left handed)
@@ -321,10 +351,10 @@ namespace Mathd {
 			float sinTheta = (float) System.Math.Sin(degrees);
 			float cosTheta = (float) System.Math.Cos(degrees);
 
-			float newX = (x_ * cosTheta) - (y_ * sinTheta);
-			float newY = (x_ * sinTheta) + (y_ * cosTheta);
+			float newX = (x * cosTheta) - (y * sinTheta);
+			float newY = (x * sinTheta) + (y * cosTheta);
 
-			return new Mathd.Vector3(newX, newY, z_);
+			return new Mathd.Vector3(newX, newY, z);
 		}
 
 		// Dot Product
@@ -332,6 +362,162 @@ namespace Mathd {
 		// If the same vector is used both sides = magnitude of the vector, squared
 		static public float DotProduct(Mathd.Vector3 lhs, Mathd.Vector3 rhs) {
 		  return ( (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z) );
+		}
+
+		// Cross Product (Left handed)
+		// Normal to the plane defined by the two vectors
+		// Has length = to the area of the parallelogram formed by the two vectors
+		static public Mathd.Vector3 CrossProduct(Mathd.Vector3 lhs, Mathd.Vector3 rhs) {
+			return new Mathd.Vector3( (lhs.y * rhs.z) - (lhs.z * rhs.y),
+									  (lhs.z * rhs.x) - (lhs.x * rhs.z),
+									  (lhs.x * rhs.y) - (lhs.y * rhs.x)  );
+		}
+
+		// Distance between two points
+		static public float Distance(Mathd.Vector3 start, Mathd.Vector3 end) {
+			return new Mathd.Vector3(end - start).magnitude;
+		}
+
+		// Linear Interpolation between two points
+		// Implementation adapted from: http://www.blueraja.com/blog/404/how-to-use-unity-3ds-linear-interpolation-vector3-lerp-correctly#comment-23334
+		static public Mathd.Vector3 Lerp(Mathd.Vector3 start, Mathd.Vector3 end, float t) {
+			// Ensure requested distance along interpolation is between 0 and 1
+			t = UnityEngine.Mathf.Clamp01(t);
+			// Method guarantees the return will equal the end position when t = 1
+			return new Mathd.Vector3((1 - t) * start) + (t * end);
+		}
+
+	}
+
+
+
+	//------------------------------------------------------------------------------//
+	//																				//
+	//									Vector4										//
+	//																				//
+	//------------------------------------------------------------------------------//
+
+	public class Vector4 {
+
+		private float w_;
+		private float x_;
+		private float y_;
+		private float z_;
+
+		public float w { get { return w_; } set { w_ = value; } }
+		public float x { get { return x_; } set { x_ = value; } }
+		public float y { get { return y_; } set { y_ = value; } }
+		public float z { get { return z_; } set { z_ = value; } }
+
+
+
+		// CONSTRUCTORS //
+
+		public Vector4 () {
+			w_ = 0;
+			x_ = 0;
+			y_ = 0;
+			z_ = 0;
+		}
+
+		public Vector4 (float w, float x, float y, float z) {
+			w_ = w;
+			x_ = x;
+			y_ = y;
+			z_ = z;
+		}
+
+		public Vector4 (Mathd.Vector4 vec4) {
+			w_ = vec4.w;
+			x_ = vec4.x;
+			y_ = vec4.y;
+			z_ = vec4.z;
+		}
+		public Vector4 (UnityEngine.Vector4 vec4) {
+			w_ = vec4.w;
+			x_ = vec4.x;
+			y_ = vec4.y;
+			z_ = vec4.z;
+		}
+
+		static public Mathd.Vector4 zero	 { get { return new Mathd.Vector3( 0,  0,  0,  0); } }
+		static public Mathd.Vector4 one		 { get { return new Mathd.Vector3( 1,  1,  1,  1); } }
+		static public Mathd.Vector4 wPos1	 { get { return new Mathd.Vector3( 1,  0,  0,  0); } }
+		static public Mathd.Vector4 wNeg1	 { get { return new Mathd.Vector3(-1,  0,  0,  0); } }
+		static public Mathd.Vector4 right	 { get { return new Mathd.Vector3( 0,  1,  0,  0); } }
+		static public Mathd.Vector4 left	 { get { return new Mathd.Vector3( 0, -1,  0,  0); } }
+		static public Mathd.Vector4 up		 { get { return new Mathd.Vector3( 0,  0,  1,  0); } }
+		static public Mathd.Vector4 down 	 { get { return new Mathd.Vector3( 0,  0, -1,  0); } }
+		static public Mathd.Vector4 forward  { get { return new Mathd.Vector3( 0,  0,  0,  1); } }
+		static public Mathd.Vector4 backward { get { return new Mathd.Vector3( 0,  0,  0, -1); } }
+
+		public UnityEngine.Vector4 toUnityVec4 {
+			get { 
+				return new UnityEngine.Vector4(x, y, z, w);
+			}
+		}
+
+
+
+		// ARETHMETIC OPERATIONS //
+
+		// Add
+		static public Mathd.Vector4 operator +(Mathd.Vector4 lhs, Mathd.Vector4 rhs) {
+			float newW = lhs.w + rhs.w;
+			float newX = lhs.x + rhs.x;
+			float newY = lhs.y + rhs.y;
+			float newZ = lhs.z + rhs.z;
+			return new Mathd.Vector4(newW, newX, newY, newZ);
+		}
+
+		// Subtract
+		static public Mathd.Vector4 operator -(Mathd.Vector4 lhs, Mathd.Vector4 rhs) {
+			float newW = lhs.w - rhs.w;
+			float newX = lhs.x - rhs.x;
+			float newY = lhs.y - rhs.y;
+			float newZ = lhs.z - rhs.z;
+			return new Mathd.Vector4(newW, newX, newY, newZ);
+		}
+
+		// Multiply by scalar
+		static public Mathd.Vector4 operator *(Mathd.Vector4 vec4, float scalar) {
+			float newW = vec4.w * scalar;
+			float newX = vec4.x * scalar;
+			float newY = vec4.y * scalar;
+			float newZ = vec4.z * scalar;
+			return new Mathd.Vector4(newW, newX, newY, newZ);
+		}
+		static public Mathd.Vector4 operator *(float scalar, Mathd.Vector4 vec4) {
+			return vec4 * scalar;
+		}
+		static public Mathd.Vector4 operator /(Mathd.Vector4 vec4, float scalar) {
+			return vec4 * (1 / scalar);
+		}
+
+
+
+		// ATTRIBUTES AND PRODUCTS //
+
+		// Magnitude a.k.a. Norm
+		public float magnitude { 
+			// Inefficient sqrt version
+			get { return (float) System.Math.Sqrt( (w * w) + (x * x) + (y * y) + (z * z) ); } 
+		}
+
+		// Normalised a.k.a. Unit length
+		public Mathd.Vector4 normalised {
+			// Inefficient divide version
+			get { 
+				float this_magnitude = this.magnitude; 
+				return new Mathd.Vector4( w / this_magnitude, x / this_magnitude, y / this_magnitude, z / this_magnitude );
+			}
+		}
+
+		// Dot Product
+		// The angle between two vectors
+		// If the same vector is used both sides = magnitude of the vector, squared
+		static public float DotProduct(Mathd.Vector4 lhs, Mathd.Vector4 rhs) {
+		  return ( (lhs.w * rhs.w) + (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z) );
 		}
 
 		// Cross Product (Left handed)
@@ -618,8 +804,8 @@ namespace Mathd {
 		// Multiplication
 		// (lhs and rhs need to be oposite way around for left handed ?)
 		static public Mathd.DualQuaternion operator *(Mathd.DualQuaternion lhs, Mathd.DualQuaternion rhs) {
-			Mathd.Quaternion newRealPart =  lhs.real * rhs.real;
-			Mathd.Quaternion newDualPart = (lhs.real * rhs.dual) + (lhs.dual * rhs.real);
+			Mathd.Quaternion newRealPart =  rhs.real * lhs.real;
+			Mathd.Quaternion newDualPart = (rhs.real * lhs.dual) + (rhs.dual * lhs.real);
 			return new Mathd.DualQuaternion(newRealPart, newDualPart);
 		}
 
