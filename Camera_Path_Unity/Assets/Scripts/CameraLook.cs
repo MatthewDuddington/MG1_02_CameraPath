@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraLook : MonoBehaviour {
 
+    public GameObject pois_holder; 
+
     public PointOfInterest[] pois;
     public int poi_ID = 0;
     public GameObject PoIBlob;
@@ -15,7 +17,13 @@ public class CameraLook : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
+        pois = new PointOfInterest[pois_holder.transform.childCount];
+        for (int i = 0; i < pois.Length; i++)
+        {
+            pois[i] = pois_holder.transform.GetChild(i).transform.GetChild(0).GetComponent<PointOfInterest>();
+        }
+
 //		cushioningCurve = new HermitCurve(Vector3.zero, new Vector3(1,1f,0), new Vector3(3f,-0.5f,0), new Vector3(-3f,0.5f,0));
 //		cushioningCurve.DrawDebugCurve(0.1f, 100);
 	}
