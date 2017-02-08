@@ -440,16 +440,16 @@ namespace Mathd {
 			z_ = vec4.z;
 		}
 
-		static public Mathd.Vector4 zero	 { get { return new Mathd.Vector3( 0,  0,  0,  0); } }
-		static public Mathd.Vector4 one		 { get { return new Mathd.Vector3( 1,  1,  1,  1); } }
-		static public Mathd.Vector4 wPos1	 { get { return new Mathd.Vector3( 1,  0,  0,  0); } }
-		static public Mathd.Vector4 wNeg1	 { get { return new Mathd.Vector3(-1,  0,  0,  0); } }
-		static public Mathd.Vector4 right	 { get { return new Mathd.Vector3( 0,  1,  0,  0); } }
-		static public Mathd.Vector4 left	 { get { return new Mathd.Vector3( 0, -1,  0,  0); } }
-		static public Mathd.Vector4 up		 { get { return new Mathd.Vector3( 0,  0,  1,  0); } }
-		static public Mathd.Vector4 down 	 { get { return new Mathd.Vector3( 0,  0, -1,  0); } }
-		static public Mathd.Vector4 forward  { get { return new Mathd.Vector3( 0,  0,  0,  1); } }
-		static public Mathd.Vector4 backward { get { return new Mathd.Vector3( 0,  0,  0, -1); } }
+		static public Mathd.Vector4 zero	 { get { return new Mathd.Vector4( 0,  0,  0,  0); } }
+		static public Mathd.Vector4 one		 { get { return new Mathd.Vector4( 1,  1,  1,  1); } }
+		static public Mathd.Vector4 wPos1	 { get { return new Mathd.Vector4( 1,  0,  0,  0); } }
+		static public Mathd.Vector4 wNeg1	 { get { return new Mathd.Vector4(-1,  0,  0,  0); } }
+		static public Mathd.Vector4 right	 { get { return new Mathd.Vector4( 0,  1,  0,  0); } }
+		static public Mathd.Vector4 left	 { get { return new Mathd.Vector4( 0, -1,  0,  0); } }
+		static public Mathd.Vector4 up		 { get { return new Mathd.Vector4( 0,  0,  1,  0); } }
+		static public Mathd.Vector4 down 	 { get { return new Mathd.Vector4( 0,  0, -1,  0); } }
+		static public Mathd.Vector4 forward  { get { return new Mathd.Vector4( 0,  0,  0,  1); } }
+		static public Mathd.Vector4 backward { get { return new Mathd.Vector4( 0,  0,  0, -1); } }
 
 		public UnityEngine.Vector4 toUnityVec4 {
 			get { 
