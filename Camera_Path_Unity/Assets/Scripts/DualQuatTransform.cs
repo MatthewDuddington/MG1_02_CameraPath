@@ -24,6 +24,7 @@ public class DualQuatTransform : MonoBehaviour {
 	// Takes in a Unity Vector3 and Unity Quaternion (for ease of use with GameObject.Transform to avoid multiple conversions, for now)
 	// TODO Doesnt yet work propperly: Translation is 2x the corrrect vector; Rotation causes a translation as well as a rotation.
 	// TODO Not sure how to combine this with interpolation (how would we use t?), does it require SLERP plus somthing else, where to apply this?
+			// TODO Review equations here: http://www.xbdev.net/misc_demos/demos/dual_quaternions_beyond/paper.pdf
 	void MoveWithDualQuat (UnityEngine.Vector3 t_position, UnityEngine.Quaternion t_rotation) {
 		// Translate Unity Vector3 position and Unity Quaternion rotation into Mathd Dual Quaternion.
 		Mathd.DualQuaternion point = new Mathd.DualQuaternion(new Mathd.Vector3(transform.position), new Mathd.Quaternion(transform.rotation));
